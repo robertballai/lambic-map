@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Lambic Places - Brussels Area</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+	<link href='https://fonts.googleapis.com/css?family=Courgette' rel='stylesheet'>
+    <link
+      href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        color: #404040;
+        font: 400 15px/22px 'Courgette', 'Helvetica Neue', sans-serif;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+      }
+
+	  #legends {
+  position: absolute;
+  z-index: 1;
+  bottom: 20px;
+  right: 20px;
+  background-color: #77b0e9;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+      * {
+        box-sizing: border-box;
+      }
+
+      .sidebar {
+        position: absolute;
+        width: 20%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        border-right: 1px solid rgba(0, 0, 0, 0.25);
+      }
+
+      .map {
+        position: absolute;
+        left: 20%;
+        width: 80%;
+        top: 0;
+        bottom: 0;
+      }
+
+      h1 {
+        font-size: 22px;
+        margin: 0;
+        font-weight: 400;
+        line-height: 20px;
+        padding: 20px 2px;
+      }
+
+      a {
+        color: #404040;
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: #1B6EC0;
+      }
+
+      .heading {
+        background: #fff;
+        border-bottom: 1px solid #eee;
+        min-height: 60px;
+        line-height: 60px;
+        padding: 0 10px;
+        background-color: #1B6EC0;
+        color: #fff;
+      }
+
+      .listings {
+        height: 100%;
+        overflow: auto;
+        padding-bottom: 60px;
+      }
+
+      .listings .item {
+        display: block;
+        border-bottom: 1px solid #eee;
+        padding: 10px;
+        text-decoration: none;
+      }
+
+      .listings .item:last-child {
+        border-bottom: none;
+      }
+      .listings .item .title {
+        display: block;
+        color: #1B6EC0;
+        font-weight: 700;
+      }
+
+      .listings .item .title small {
+        font-weight: 400;
+      }
+      .listings .item.active .title,
+      .listings .item .title:hover {
+        color: #A0C8F1;
+      }
+      .listings .item.active {
+        background-color: #f8f8f8;
+      }
+      ::-webkit-scrollbar {
+        width: 3px;
+        height: 3px;
+        border-left: 0;
+        background: rgba(0, 0, 0, 0.1);
+      }
+      ::-webkit-scrollbar-track {
+        background: none;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1B6EC0;
+        border-radius: 0;
+      }
+
+      .marker {
+        border: none;
+        cursor: pointer;
+        height: 56px;
+        width: 56px;
+        background-image: url(marker.png);
+      }
+
+      /* Marker tweaks */
+      .mapboxgl-popup {
+        padding-bottom: 20px;
+      }
+
+      .mapboxgl-popup-close-button {
+        display: none;
+      }
+      .mapboxgl-popup-content {
+        font: 400 15px/22px 'Courgette', 'Helvetica Neue', sans-serif;
+        padding: 0;
+        max-width: none;
+      }
+      .mapboxgl-popup-content h3 {
+        background: #ffffff;
+        color: #2D2D2D;
+        margin: 0;
+        padding: 10px;
+        border-radius: 3px 3px 0 0;
+        font-weight: 700;
+        margin-top: -15px;
+		border-top:2px solid #77b0e9;
+		border-bottom:2px solid #77b0e9;
+		border-left:2px solid #77b0e9;
+		border-right:2px solid #77b0e9;
+      }
+
+      .mapboxgl-popup-content h4 {
+        margin: 0;
+        padding: 10px;
+        font-weight: 400;
+      }
+
+      .mapboxgl-popup-content div {
+        padding: 10px;
+      }
+
+      .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
+        margin-top: 15px;
+      }
+
+      .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
+        border-bottom-color: #ffffff;
+      }
+    #legends img {
+  max-width: 200px;
+  height: auto;
+  display: block;
+}
+
+      .search-container {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        background: #fff;
+      }
+
+      .search-container input {
+        width: 100%;
+        padding: 10px 12px;
+        font: 400 15px/22px 'Courgette', 'Helvetica Neue', sans-serif;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        outline: none;
+      }
+
+      .search-container input:focus {
+        border-color: #1B6EC0;
+      }
+
+    
+      #toggleSidebar {
+        display: none;
+      }
+
+      @media (max-width: 900px) {
+        body {
+          font-size: 14px;
+          line-height: 20px;
+        }
+
+        .sidebar {
+          width: 100%;
+          height: 42%;
+          top: auto;
+          bottom: 0;
+          left: 0;
+          z-index: 2;
+          background: #fff;
+          border-right: none;
+          border-top: 1px solid rgba(0, 0, 0, 0.25);
+        }
+
+        .sidebar.collapsed {
+          height: 64px;
+          overflow: hidden;
+        }
+
+        .map {
+          left: 0;
+          width: 100%;
+          top: 0;
+          bottom: 42%;
+        }
+
+        .sidebar.collapsed + .map {
+          bottom: 0;
+        }
+
+        .heading {
+          min-height: 64px;
+          line-height: 1.2;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          padding: 10px 12px;
+        }
+
+        h1 {
+          font-size: 18px;
+          line-height: 22px;
+          padding: 0;
+          margin: 0;
+        }
+
+        #toggleSidebar {
+          display: inline-block;
+          background: #fff;
+          color: #1B6EC0;
+          border: none;
+          border-radius: 6px;
+          padding: 8px 10px;
+          font: 700 14px/16px 'Courgette', 'Helvetica Neue', sans-serif;
+          cursor: pointer;
+          flex-shrink: 0;
+        }
+
+        .search-container {
+          padding: 8px 10px;
+        }
+
+        .search-container input {
+          font-size: 16px;
+        }
+
+        .listings {
+          height: calc(100% - 120px);
+          padding-bottom: 20px;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .listings .item {
+          padding: 12px 10px;
+        }
+
+        .marker {
+          height: 42px;
+          width: 42px;
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+        }
+
+        #legends {
+          right: 10px;
+          bottom: calc(42% + 10px);
+          max-width: calc(100% - 20px);
+          padding: 4px;
+        }
+
+        .sidebar.collapsed ~ #legends {
+          bottom: 10px;
+        }
+
+        #legends img {
+          max-width: 120px;
+        }
+
+        .mapboxgl-popup-content {
+          max-width: 260px;
+        }
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="heading">
+        <h1>Lambic Places - Brussels Area</h1>
+        <button id="toggleSidebar" type="button">Hide list</button>
+      </div>
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search places by name..." />
+      </div>
+      <div id="listings" class="listings"></div>
+    </div>
+		<div id="legends">
+		<img alt="" style="display: inline;" id="alvinne_order" src="lambic_legend_clean.jpg">
+	</div>
+    <div id="map" class="map"></div>
+    <script>
+      mapboxgl.accessToken = 'pk.eyJ1Ijoicm9iZXJ0YmFsbGFpIiwiYSI6ImNtbnJrMHp4dTAzNXIydW9tcnd1cWJod2gifQ.psK-o8PdmJjyfXMgUf552Q';
+
+      /**
+       * Add the map to the page
+       */
+	  const bounds = [
+		[3.82409, 50.60187], // Southwest coordinates
+		[4.65622, 51.06307] // Northeast coordinates
+		]; 
+	   
+      const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/robertballai/ckirv2uq80cly19qe6yjwu7n2',
+        center: [4.341, 50.810],
+        zoom: 10.5,
+		maxBounds: bounds // Set the map's geographical boundaries.
+      });
+	  
+      /**
+       * Add map controls
+       */
+		map.addControl(new mapboxgl.NavigationControl());
+		
+      const stores = {
+        'type': 'FeatureCollection',
+		"features" : [
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.1139087, 50.7958083 ]
+				},
+				"properties" : {
+					"NAME" : "De Cam Geuzestekerij/Cafe De Cam",
+					"TYPE" : "Blenders",
+					"ADDRESS" : "Volkscafe De Cam, Dorpsstraat 67a, 1755 Gooik",
+					"LINK" : "https://www.facebook.com/De.Cam.Pajottenland"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.2971918, 50.728829 ]
+				},
+				"properties" : {
+					"NAME" : "Hanssens Artisanaal",
+					"TYPE" : "Blenders",
+					"ADDRESS" : "Vroenenbosstraat 15 Dworp, 1653",
+					"LINK" : "N/A"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.301393, 50.758709 ]
+				},
+				"properties" : {
+					"NAME" : "Brouwerij Oud Beersel/Museum",
+					"TYPE" : "Blenders",
+					"ADDRESS" : "230 Laarheidestraat Beersel, 1650",
+					"LINK" : "http://www.oudbeersel.com"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.107439, 50.692717 ]
+				},
+				"properties" : {
+					"NAME" : "Gueuzerie Tilquin",
+					"TYPE" : "Blenders",
+					"ADDRESS" : "Chaussee Maieur Habils 110 Rebecq-Rognon, 1430",
+					"LINK" : "http://www.gueuzerietilquin.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.2756951746, 50.7536611795 ]
+				},
+				"properties" : {
+					"NAME" : "Het Boerenerf",
+					"TYPE" : "Blenders",
+					"ADDRESS" : "Sollenberg 3, 1654 Beersel",
+					"LINK" : "https://www.eylenbosch.bio/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.2193827, 50.7117523 ]
+				},
+				"properties" : {
+					"NAME" : "Brouwerij Boon",
+					"TYPE" : "Breweries",
+					"ADDRESS" : "Fonteinstraat 65 Lembeek, 1502",
+					"LINK" : "http://www.boon.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.2735559, 50.7632891 ]
+				},
+				"properties" : {
+					"NAME" : "Brouwerij 3 Fonteinen/3 Fonteinen Lamik-O-Droom",
+					"TYPE" : "Breweries",
+					"ADDRESS" : "Molenstraat 47, 1651 Lot",
+					"LINK" : "http://www.3fonteinen.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3357816, 50.841573 ]
+				},
+				"properties" : {
+					"NAME" : "Brasserie Cantillon/Brussels Museum of the Gueuze",
+					"TYPE" : "Breweries",
+					"ADDRESS" : "56 rue Gheude B-1070 Brussels",
+					"LINK" : "http://www.cantillon.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.1648105, 50.8529156 ]
+				},
+				"properties" : {
+					"NAME" : "Brouwerij De Troch",
+					"TYPE" : "Breweries",
+					"ADDRESS" : "Langestraat 20 Wambeek, 1741",
+					"LINK" : "http://www.detroch.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.234098, 50.875206 ]
+				},
+				"properties" : {
+					"NAME" : "Brouwerij Girardin",
+					"TYPE" : "Breweries",
+					"ADDRESS" : "Lindenbergstraat 10-12 Dilbeek-St Ulriks Kapelle, 1700",
+					"LINK" : "http://www.girardin1882.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.212783, 50.815754 ]
+				},
+				"properties" : {
+					"NAME" : "Brouwerij Lindemans",
+					"TYPE" : "Breweries",
+					"ADDRESS" : "Lenniksebaan 1479 Vlezenbeek, 1602",
+					"LINK" : "http://www.lindemans.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.249748, 50.9105384 ]
+				},
+				"properties" : {
+					"NAME" : "Brasserie Mort Subite",
+					"TYPE" : "Breweries",
+					"ADDRESS" : "Lierput 1 Asse-Kobbegem, 1730",
+					"LINK" : "http://www.mort-subite.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.2473694, 50.8398991 ]
+				},
+				"properties" : {
+					"NAME" : "Brouwerij Timmermans/Museum",
+					"TYPE" : "Breweries",
+					"ADDRESS" : "Kerkstraat 11 Dilbeek-Itterbeek, 1701",
+					"LINK" : "http://brtimmermans.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.307852, 50.7665904 ]
+				},
+				"properties" : {
+					"NAME" : "Brouwerij 3 Fonteinen/Restaurant",
+					"TYPE" : "Breweries",
+					"ADDRESS" : "Hoogstraat 2 a, 1650 Beersel",
+					"LINK" : "http://www.3fonteinen.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.279371328, 50.7907153927 ]
+				},
+				"properties" : {
+					"NAME" : "Lambiek Fabriek",
+					"TYPE" : "Breweries",
+					"ADDRESS" : "Georges Wittouckstraat 61 1600 Sint Pieters Leeuw",
+					"LINK" : "http://www.lambiekfabriek.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.2871617576, 50.7989800538 ]
+				},
+				"properties" : {
+					"NAME" : "Brasserie Belle-Vue",
+					"TYPE" : "Breweries",
+					"ADDRESS" : "Bergensesteenweg 144 Sint-Pieters-Leeuw, 1600",
+					"LINK" : "http://www.ab-inbev.be/fr_BE/belle-vue.html"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.2507542994, 50.7418784195 ]
+				},
+				"properties" : {
+					"NAME" : "Den Herberg",
+					"TYPE" : "Breweries",
+					"ADDRESS" : "Octave de Kerchove d'Exaerdestraat 16 B-1501 Buizingen",
+					"LINK" : "https://www.denherberg.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.2499353566, 50.9108545236 ]
+				},
+				"properties" : {
+					"NAME" : "Brouwerij Eylenbosch",
+					"TYPE" : "Breweries",
+					"ADDRESS" : "Lierput 1 Asse-Kobbegem, 1730",
+					"LINK" : "https://eylenbosch.beer/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.334082, 50.7414459 ]
+				},
+				"properties" : {
+					"NAME" : "Lambic Visitor Center (\"De Lambiek\")",
+					"TYPE" : "Museums",
+					"ADDRESS" : "Gemeenveldstraat 1, 1652 Alsemberg",
+					"LINK" : "http://www.delambiek.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3525177, 50.8462348 ]
+				},
+				"properties" : {
+					"NAME" : "Museum of Belgian Brewers",
+					"TYPE" : "Museums",
+					"ADDRESS" : "Grand Place 10, 1000 Brussels",
+					"LINK" : "http://www.belgianbrewers.be/en/who-are-we/museum-54/article/the-museum-of-the-belgian-brewers"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3750371, 50.863477 ]
+				},
+				"properties" : {
+					"NAME" : "Schaerbeek Museum of Belgian Beer",
+					"TYPE" : "Museums",
+					"ADDRESS" : "Avenue Louis Bertrand 33-35, 1030 Schaerbeek",
+					"LINK" : "http://users.skynet.be/museedelabiere/htmluk/menu.html"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3513853, 50.8481995 ]
+				},
+				"properties" : {
+					"NAME" : "A la Becasse",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue de Tabora 11 B-1000 Brussels",
+					"LINK" : "http://www.alabecasse.com"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3562985, 50.8485889 ]
+				},
+				"properties" : {
+					"NAME" : "A la Mort Subite",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue Montagne-aux-Herbes Potageres 7 B, 1000 Brussels",
+					"LINK" : "https://www.alamortsubite.com/en/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.281962, 50.737817 ]
+				},
+				"properties" : {
+					"NAME" : "Grill Resto Boelekewis",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Alsembergsesteenweg 856, 1653 Dworp",
+					"LINK" : "http://www.boelekewis.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.079729, 50.87259 ]
+				},
+				"properties" : {
+					"NAME" : "De Heeren van Liedekercke",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Kasteelstraat 33, 9470 Denderleeuw",
+					"LINK" : "http://www.heerenvanliedekercke.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.1399249, 50.8317889 ]
+				},
+				"properties" : {
+					"NAME" : "In de Verzekering tegen de Grote Dorst",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Frans Baetensstraat 45 1750 Eizeringen (Lennik)",
+					"LINK" : "http://www.dorst.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3020508, 50.7230353 ]
+				},
+				"properties" : {
+					"NAME" : "In De Welkom",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Molenveld 79, 1653 Dworp",
+					"LINK" : "N/A"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.346961, 50.8451203 ]
+				},
+				"properties" : {
+					"NAME" : "Moeder Lambic Fontainas",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Moeder Fontainas, 8 place Fontainas, Brussels 1000",
+					"LINK" : "https://www.moederlambic.com/bars/fr/home/?lang=fr"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3448051, 50.823909 ]
+				},
+				"properties" : {
+					"NAME" : "Moeder Lambic Original",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Chez Moeder Lambic, 68, Rue de Savoie, Brussels 1060",
+					"LINK" : "https://www.moederlambic.com/bars/fr/home/?lang=fr"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.349831, 50.8458371 ]
+				},
+				"properties" : {
+					"NAME" : "Nuetnigenough",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "25 rue du Lombard, 1000 Brussels",
+					"LINK" : "https://www.nuetnigenough.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3551789, 50.8477482 ]
+				},
+				"properties" : {
+					"NAME" : "Pistolet Original - Galeries",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue des Bouchers 44, 1000 Brussels",
+					"LINK" : "https://www.pistolet-original.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.353082, 50.841579 ]
+				},
+				"properties" : {
+					"NAME" : "Pistolet Original - Sablon",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue Joseph Stevens 24, 1000 Brussels",
+					"LINK" : "https://www.pistolet-original.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3649252, 50.848644 ]
+				},
+				"properties" : {
+					"NAME" : "Bier Circus",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue de l'Enseignement, 57, 1000 Brussels",
+					"LINK" : "https://www.bier-circus.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3428992, 50.8228532 ]
+				},
+				"properties" : {
+					"NAME" : "Dynamo - Bar de Soif",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Chaussee d'Alsemberg, 130, 1060 Saint-Gilles",
+					"LINK" : "https://www.facebook.com/dynamobarBXL/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3504554, 50.841251 ]
+				},
+				"properties" : {
+					"NAME" : "Les Brigittines",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "5 place de la Chapelle, 1000 Brussels",
+					"LINK" : "https://www.lesbrigittines.com"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.341909, 50.852757 ]
+				},
+				"properties" : {
+					"NAME" : "Brussels Beer Project",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "188, Antoine Dansaert, 1000 Brussels",
+					"LINK" : "https://www.beerproject.be/en/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3433581, 50.8321428 ]
+				},
+				"properties" : {
+					"NAME" : "Malt Attacks",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "18 Avenue Jean Volders, 1060 Saint-Gilles",
+					"LINK" : "https://www.maltattacks.com"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.372665, 50.8298377 ]
+				},
+				"properties" : {
+					"NAME" : "Malting Pot",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue Scarron 50, 1050 Ixelles",
+					"LINK" : "https://www.maltingpot.be/en/home"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.2981513304, 50.7303505385 ]
+				},
+				"properties" : {
+					"NAME" : "De Zwaan",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Gemeentehuisstraat 1, Dworp",
+					"LINK" : "https://www.facebook.com/Herberg-De-Zwaan-102008751223706/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3538924675, 50.8484612871 ]
+				},
+				"properties" : {
+					"NAME" : "Delirium Cafe",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Impasse de la Fidelite 4, Brussels",
+					"LINK" : "http://deliriumcafe.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3499928088, 50.8447254666 ]
+				},
+				"properties" : {
+					"NAME" : "Poechenellekelder",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue du Chene 5 B-1000 Brussels",
+					"LINK" : "https://poechenellekelder.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.237458918, 50.7372765461 ]
+				},
+				"properties" : {
+					"NAME" : "'t Parlement",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Klinkaert 10 - 19 B-1500 Halle",
+					"LINK" : "http://www.tparlement.be"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.2238682923, 50.7139312795 ]
+				},
+				"properties" : {
+					"NAME" : "Cafe De Kring",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Stevens Dewaelplein 15 1502 Lembeek",
+					"LINK" : "https://www.facebook.com/Caf%C3%A9-De-Kring-1483982201872455/?ref=page_internal"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.0893058307, 50.813818331 ]
+				},
+				"properties" : {
+					"NAME" : "Cafe Den Haas",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Wijngaardbosstraat 6 1755 Gooik",
+					"LINK" : "https://www.facebook.com/CafeDenHaas/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.2564346649, 50.7354482159 ]
+				},
+				"properties" : {
+					"NAME" : "De Kluis Cafe",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Nachtegaalstraat 128, 1501 Halle",
+					"LINK" : "https://www.facebook.com/De-Kluis-Caf%C3%A9-100541801306312/?ref=page_internal"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.0965362023, 50.7293624624 ]
+				},
+				"properties" : {
+					"NAME" : "Cafe Terlindenhof",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "A. Terlindenstraat 13, 1540 Herne",
+					"LINK" : "https://www.terlindenhof.be/nl/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.2397178707, 50.7969810234 ]
+				},
+				"properties" : {
+					"NAME" : "Cafe In t Vagevuur",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Vlezenbeeklaan 91, 1600 Sint-Pieters-Leeuw",
+					"LINK" : "http://drinkbelgianbeer.com/cafes/cafe-t-vagevuur-sint-pieters-leeuw"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.2373852836, 50.7363994999 ]
+				},
+				"properties" : {
+					"NAME" : "Blue Note Pub",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Grote Markt 23-24 1500 Halle",
+					"LINK" : "https://www.bluenotepub.be/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3180313853, 50.7328584726 ]
+				},
+				"properties" : {
+					"NAME" : "De Smidse",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Fabriekstraat 23 1652 Alsemberg",
+					"LINK" : "http://www.desmidse1655.be/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3745278, 50.8636612009 ]
+				},
+				"properties" : {
+					"NAME" : "Le Barboteur Bierotheque",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Av. Louis Bertrand 23, 1030 Schaerbeek",
+					"LINK" : "https://www.facebook.com/lebarboteurbierotheque/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3485904, 50.8678117009 ]
+				},
+				"properties" : {
+					"NAME" : "Brasserie de la Senne",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Anna Bochdreef 19/21, 1000 Bruxelles",
+					"LINK" : "http://brasseriedelasenne.be/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.352024, 50.8439171009 ]
+				},
+				"properties" : {
+					"NAME" : "GIST",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Pl. de la Vieille Halle aux Bles 30, 1000 Bruxelles",
+					"LINK" : "https://www.facebook.com/gistbxl/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3463237, 50.8430050009 ]
+				},
+				"properties" : {
+					"NAME" : "Pasta Madre",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Pl. Rouppe 10, 1000 Bruxelles",
+					"LINK" : "https://pastamadre.be/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3470194, 50.8373725009 ]
+				},
+				"properties" : {
+					"NAME" : "La Brocante",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue Blaes 170, 1000 Bruxelles",
+					"LINK" : "https://www.facebook.com/cafelabrocante"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3460366, 50.8311401009 ]
+				},
+				"properties" : {
+					"NAME" : "L'Ermitage Saint-Gilles",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue de Moscou 34, 1060 Saint-Gilles",
+					"LINK" : "https://ermitagesaintgilles.be/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3485041, 50.8708469009 ]
+				},
+				"properties" : {
+					"NAME" : "La Source Beer co.",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue Dieudonne Lefevre 4, 1020 Bruxelles",
+					"LINK" : "https://www.lasourcebeer.be/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3633127, 50.8272433009 ]
+				},
+				"properties" : {
+					"NAME" : "BBP Bailli",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue du Bailli 1/A, 1000 Bruxelles",
+					"LINK" : "https://www.beerproject.be/en/taproom/bailli/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3372074, 50.8407377009 ]
+				},
+				"properties" : {
+					"NAME" : "Brasserie de l'Ermitage",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue Lambert Crickx 26, 1070 Anderlecht, 1070 Brussels",
+					"LINK" : "https://ermitagenanobrasserie.be/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3730268, 50.8658924009 ]
+				},
+				"properties" : {
+					"NAME" : "Brasserie de la Mule",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue Rubens 95, 1030 Schaerbeek",
+					"LINK" : "https://brasseriedelamule.wixsite.com/mon-site"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3474844, 50.8501761009 ]
+				},
+				"properties" : {
+					"NAME" : "Monk",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue Sainte-Catherine 42, 1000 Bruxelles",
+					"LINK" : "http://www.monk.be/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3451032, 50.8261714009 ]
+				},
+				"properties" : {
+					"NAME" : "L'Amere a Boire Saint-Gilles",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Av. Paul Dejaer 20, 1060 Saint-Gilles",
+					"LINK" : "https://lamereaboire.com/fr/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3428186, 50.8226138009 ]
+				},
+				"properties" : {
+					"NAME" : "Le Bar a Jeux",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Chau. d'Alsemberg 136, 1060 Saint-Gilles",
+					"LINK" : "https://lebarajeux.be/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3352467, 50.8415169009 ]
+				},
+				"properties" : {
+					"NAME" : "Les caves de l'Ermitage",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue Gheude 53, 1070 Anderlecht",
+					"LINK" : "https://ermitagenanobrasserie.be/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3431254, 50.8531672009 ]
+				},
+				"properties" : {
+					"NAME" : "NIGHTSHOP",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue de Flandre 167, 1000 Bruxelles",
+					"LINK" : "https://www.instagram.com/nightshop.brussels/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3471572, 50.8454185009 ]
+				},
+				"properties" : {
+					"NAME" : "La Fruitiere",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue du Marche au Charbon Kolenmarkt 99/103, 1000 Bruxelles",
+					"LINK" : "https://lafruitiere.brussels/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3643234, 50.8482539009 ]
+				},
+				"properties" : {
+					"NAME" : "La Tana",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue de l'Enseignement 27, 1000 Bruxelles",
+					"LINK" : "https://latana.be/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.1755005, 50.7237534009 ]
+				},
+				"properties" : {
+					"NAME" : "Cafe De Bascule",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Hondzochtstraat 3, 1673 Pepingen",
+					"LINK" : "https://www.facebook.com/debasculebellingen/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.2283982, 50.7641301009 ]
+				},
+				"properties" : {
+					"NAME" : "In de Oude Smis van Mekingen",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Jan Baptist Cardijnstraat 10, 1600 Sint-Pieters-Leeuw",
+					"LINK" : "https://www.facebook.com/pages/In-De-Oude-Smis-Van-Mekingen/114825428683956"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3442467, 50.8302110009 ]
+				},
+				"properties" : {
+					"NAME" : "Brasserie Verschueren",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Parv. de Saint-Gilles 11, 1060 Saint-Gilles",
+					"LINK" : "http://verschu.be/carte/"
+				}
+			},
+			{
+				"type" : "Feature",
+				"geometry" : {
+					"type" : "Point",
+					"coordinates" : [ 4.3522633, 50.8483628009 ]
+				},
+				"properties" : {
+					"NAME" : "A l'Imaige Nostre-Dame",
+					"TYPE" : "Bars, Cafes and Restaurants",
+					"ADDRESS" : "Rue du Marche Aux Herbes 8, 1000 Bruxelles",
+					"LINK" : "https://www.facebook.com/profile.php?id=100063848713396"
+				}
+			}
+		]
+      };
+
+      /**
+       * Assign a unique id to each store. You'll use this `id`
+       * later to associate each point on the map with a listing
+       * in the sidebar.
+       */
+      stores.features.forEach((store, i) => {
+        store.properties.id = i;
+      });
+
+      /**
+       * Wait until the map loads to make changes to the map.
+       */
+      map.on('load', () => {
+        /**
+         * This is where your '.addLayer()' used to be, instead
+         * add only the source without styling a layer
+         */
+        map.addSource('places', {
+          'type': 'geojson',
+          'data': stores
+        });
+
+        /**
+         * Add all the things to the page:
+         * - The location listings on the side of the page
+         * - The markers onto the map
+         */
+        buildLocationList(stores);
+        addMarkers();
+      });
+
+      /**
+       * Add a marker to the map for every store listing.
+       **/
+      function addMarkers() {
+        /* For each feature in the GeoJSON object above: */
+        for (const marker of stores.features) {
+          /* Create a div element for the marker. */
+          const el = document.createElement('div');
+          /* Assign a unique `id` to the marker. */
+          el.id = `marker-${marker.properties.id}`;
+          /* Assign the `marker` class to each marker for styling. */
+          el.className = 'marker';
+
+          /**
+           * Create a marker using the div element
+           * defined above and add it to the map.
+           **/
+          new mapboxgl.Marker(el, { offset: [0, -23] })
+            .setLngLat(marker.geometry.coordinates)
+            .addTo(map);
+
+          /**
+           * Listen to the element and when it is clicked, do three things:
+           * 1. Fly to the point
+           * 2. Close all other popups and display popup for clicked store
+           * 3. Highlight listing in sidebar (and remove highlight for all other listings)
+           **/
+          el.addEventListener('click', (e) => {
+            /* Fly to the point */
+            flyToStore(marker);
+            /* Close all other popups and display popup for clicked store */
+            createPopUp(marker);
+            /* Highlight listing in sidebar */
+            const activeItem = document.getElementsByClassName('active');
+            e.stopPropagation();
+            if (activeItem[0]) {
+              activeItem[0].classList.remove('active');
+            }
+            const listing = document.getElementById(
+              `listing-${marker.properties.id}`
+            );
+            listing.classList.add('active');
+          });
+        }
+      }
+
+
+      /**
+       * Filter the sidebar listings by place name.
+       **/
+      function filterListings() {
+        const searchValue = document
+          .getElementById('searchInput')
+          .value.toLowerCase()
+          .trim();
+
+        for (const store of stores.features) {
+          const listing = document.getElementById(`listing-${store.properties.id}`);
+          if (!listing) continue;
+
+          const storeName = store.properties.NAME.toLowerCase();
+          listing.style.display = storeName.includes(searchValue) ? 'block' : 'none';
+        }
+      }
+
+      document.getElementById('searchInput').addEventListener('input', filterListings);
+
+      /**
+       * Add a listing for each store to the sidebar.
+       **/
+      function buildLocationList(stores) {
+        for (const store of stores.features) {
+          /* Add a new listing section to the sidebar. */
+          const listings = document.getElementById('listings');
+          const listing = listings.appendChild(document.createElement('div'));
+          /* Assign a unique `id` to the listing. */
+          listing.id = `listing-${store.properties.id}`;
+          /* Assign the `item` class to each listing for styling. */
+          listing.className = 'item';
+
+          /* Add the link to the individual listing created above. */
+          const link = listing.appendChild(document.createElement('a'));
+          link.href = '#';
+          link.className = 'title';
+          link.id = `link-${store.properties.id}`;
+          link.innerHTML = `${store.properties.NAME}`;
+
+          /* Add details to the individual listing. */
+          const details = listing.appendChild(document.createElement('div'));
+          details.innerHTML = `${store.properties.ADDRESS}`;
+
+          /**
+           * Listen to the element and when it is clicked, do four things:
+           * 1. Update the `currentFeature` to the store associated with the clicked link
+           * 2. Fly to the point
+           * 3. Close all other popups and display popup for clicked store
+           * 4. Highlight listing in sidebar (and remove highlight for all other listings)
+           **/
+          link.addEventListener('click', function () {
+            for (const feature of stores.features) {
+              if (this.id === `link-${feature.properties.id}`) {
+                flyToStore(feature);
+                createPopUp(feature);
+              }
+            }
+            const activeItem = document.getElementsByClassName('active');
+            if (activeItem[0]) {
+              activeItem[0].classList.remove('active');
+            }
+            this.parentNode.classList.add('active');
+          });
+        }
+      }
+
+      /**
+       * Use Mapbox GL JS's `flyTo` to move the camera smoothly
+       * a given center point.
+       **/
+      function flyToStore(currentFeature) {
+        map.flyTo({
+          center: currentFeature.geometry.coordinates,
+          zoom: 15
+        });
+      }
+	  
+      /**
+       * Create a Mapbox GL JS `Popup`.
+       **/
+      function createPopUp(currentFeature) {
+        const popUps = document.getElementsByClassName('mapboxgl-popup');
+        if (popUps[0]) popUps[0].remove();
+        const popup = new mapboxgl.Popup({ closeOnClick: true })
+          .setLngLat(currentFeature.geometry.coordinates)
+          .setHTML(
+            `<h3>${'<a href="' + currentFeature.properties.LINK + '">' + currentFeature.properties.NAME}</h3>`
+          )
+          .addTo(map);
+      }
+
+      /**
+       * Mobile sidebar toggle
+       **/
+      function setupMobileSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const toggleButton = document.getElementById('toggleSidebar');
+
+        if (!sidebar || !toggleButton) return;
+
+        function applyMobileState() {
+          if (window.innerWidth <= 900) {
+            sidebar.classList.remove('collapsed');
+            toggleButton.textContent = 'Hide list';
+          } else {
+            sidebar.classList.remove('collapsed');
+          }
+          map.resize();
+        }
+
+        toggleButton.addEventListener('click', () => {
+          sidebar.classList.toggle('collapsed');
+          toggleButton.textContent = sidebar.classList.contains('collapsed')
+            ? 'Show list'
+            : 'Hide list';
+          setTimeout(() => map.resize(), 250);
+        });
+
+        window.addEventListener('resize', applyMobileState);
+        applyMobileState();
+      }
+
+
+      setupMobileSidebar();
+    </script>
+  </body>
+</html>
