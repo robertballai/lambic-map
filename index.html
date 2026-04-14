@@ -427,14 +427,14 @@
 		  btn.title = 'Reset view';
 		  btn.setAttribute('aria-label', 'Reset view');
 		
-		  btn.innerHTML = `
-		    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-		      <path
-		        d="M12 5L5 10h2v7h4v-4h2v4h4v-7h2L12 5z"
-		        fill="white">
-		      </path>
-		    </svg>
-		  `;
+			btn.innerHTML = `
+			  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+			    <path
+			      d="M4 4h6v2H6v4H4V4zm10 0h6v6h-2V6h-4V4zM4 14h2v4h4v2H4v-6zm14 0h2v6h-6v-2h4v-4z"
+			      fill="#333">
+			    </path>
+			  </svg>
+			`;
 		
 		  btn.onclick = () => {
 		    map.fitBounds(bounds, { padding: 20, duration: 800 });
