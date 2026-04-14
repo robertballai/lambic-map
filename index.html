@@ -24,24 +24,27 @@
 		  z-index: 1;
 		  bottom: 20px;
 		  right: 20px;
-		  background: #77b0e9; /* same color, just cleaner */
-		  padding: 6px;
+		
+		  background: rgba(119, 176, 233, 0.75); /* transparent */
+		  padding: 4px; /* smaller */
 		  border-radius: 6px;
+		
+		  backdrop-filter: blur(4px); /* optional nice effect */
 		}
 
 		#legends img {
-		  max-width: 140px;
+		  max-width: 110px;
 		  display: block;
-		  margin-top: 6px;
+		  margin-top: 4px;
 		}
 		
 		#toggleLegend {
-		  background: #fff;
+		  background: rgba(255, 255, 255, 0.9);
 		  color: #1B6EC0;
 		  border: none;
 		  border-radius: 6px;
-		  padding: 6px 8px;
-		  font-size: 12px;
+		  padding: 5px 7px;
+		  font-size: 11px;
 		  cursor: pointer;
 		}
 		
@@ -354,7 +357,7 @@
         }
 
         #legends img {
-          max-width: 120px;
+          max-width: 90px;
         }
 
         .mapboxgl-popup-content {
