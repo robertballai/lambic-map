@@ -406,6 +406,22 @@
        * Add map controls
        */
 		map.addControl(new mapboxgl.NavigationControl());
+		setTimeout(() => {
+		  const ctrlGroup = document.querySelector('.mapboxgl-ctrl-group');
+		  if (!ctrlGroup) return;
+		
+		  const btn = document.createElement('button');
+		  btn.className = 'mapboxgl-ctrl-icon';
+		  btn.type = 'button';
+		  btn.title = 'Reset view';
+		  btn.textContent = '⌂';
+		
+		  btn.onclick = () => {
+		    map.fitBounds(bounds, { padding: 20, duration: 800 });
+		  };
+		
+		  ctrlGroup.appendChild(btn);
+		}, 0);
 		
       const stores = {
         'type': 'FeatureCollection',
