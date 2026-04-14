@@ -50,7 +50,12 @@
         top: 0;
         bottom: 0;
       }
-
+		
+	  .sidebar,
+	  .map {
+ 		transition: height 0.25s ease, bottom 0.25s ease;
+	  }
+		
       h1 {
         font-size: 22px;
         margin: 0;
@@ -236,7 +241,7 @@
           bottom: 42%;
         }
 
-        .sidebar.collapsed + .map {
+        .sidebar.collapsed ~ .map {
           bottom: 0;
         }
 
