@@ -153,6 +153,17 @@
         border-radius: 0;
       }
 
+		.mapboxgl-ctrl-group button.mapboxgl-ctrl-icon svg {
+		  display: block;
+		  margin: auto;
+		}
+		
+		.mapboxgl-ctrl-group button.mapboxgl-ctrl-icon {
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+		}
+		
       .marker {
         border: none;
         cursor: pointer;
@@ -414,7 +425,16 @@
 		  btn.className = 'mapboxgl-ctrl-icon';
 		  btn.type = 'button';
 		  btn.title = 'Reset view';
-		  btn.textContent = '⌂';
+		  btn.setAttribute('aria-label', 'Reset view');
+		
+		  btn.innerHTML = `
+		    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+		      <path
+		        d="M12 5L5 10h2v7h4v-4h2v4h4v-7h2L12 5z"
+		        fill="white">
+		      </path>
+		    </svg>
+		  `;
 		
 		  btn.onclick = () => {
 		    map.fitBounds(bounds, { padding: 20, duration: 800 });
