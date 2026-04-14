@@ -19,16 +19,37 @@
         -webkit-font-smoothing: antialiased;
       }
 
-	  #legends {
-  position: absolute;
-  z-index: 1;
-  bottom: 20px;
-  right: 20px;
-  background-color: #77b0e9;
-  padding: 6px;
-  border-radius: 6px;
-}
+		#legends {
+		  position: absolute;
+		  z-index: 1;
+		  bottom: 20px;
+		  right: 20px;
+		  background: #77b0e9; /* same color, just cleaner */
+		  padding: 6px;
+		  border-radius: 6px;
+		}
 
+		#legends img {
+		  max-width: 140px;
+		  display: block;
+		  margin-top: 6px;
+		}
+		
+		#toggleLegend {
+		  background: #fff;
+		  color: #1B6EC0;
+		  border: none;
+		  border-radius: 6px;
+		  padding: 6px 8px;
+		  font-size: 12px;
+		  cursor: pointer;
+		}
+		
+		/* collapsed state */
+		#legends.collapsed img {
+		  display: none;
+		}
+		
       * {
         box-sizing: border-box;
       }
@@ -207,11 +228,6 @@
       .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
         border-bottom-color: #ffffff;
       }
-    #legends img {
-  max-width: 200px;
-  height: auto;
-  display: block;
-}
 
       .search-container {
         padding: 10px;
@@ -358,10 +374,10 @@
         <input type="text" id="searchInput" placeholder="Search places by name..." />
       </div>
       <div id="listings" class="listings"></div>
-    </div>
-		<div id="legends">
-		<img alt="" style="display: inline;" id="alvinne_order" src="lambic_legend_clean.jpg">
-	</div>
+	  <div id="legends" class="collapsed">
+		<button id="toggleLegend">Legend</button>
+		<img src="lambic_legend_clean.jpg" />
+	  </div>
     <div id="map" class="map"></div>
     <script>
       mapboxgl.accessToken = 'pk.eyJ1Ijoicm9iZXJ0YmFsbGFpIiwiYSI6ImNtbnJrMHp4dTAzNXIydW9tcnd1cWJod2gifQ.psK-o8PdmJjyfXMgUf552Q';
@@ -1521,8 +1537,20 @@
         applyMobileState();
       }
 
-
       setupMobileSidebar();
+
+	  function setupLegendToggle() {
+		const legend = document.getElementById('legends');
+		const button = document.getElementById('toggleLegend');
+		
+		if (!legend || !button) return;
+		
+		button.addEventListener('click', () => {
+			legend.classList.toggle('collapsed');
+		});
+	   }
+		
+	  setupLegendToggle();
     </script>
   </body>
 </html>
