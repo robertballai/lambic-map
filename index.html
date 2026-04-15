@@ -67,28 +67,21 @@
 		}
 
 		.legend-checkbox {
-		  appearance: none;
-		  -webkit-appearance: none;
-		
-		  width: 16px;
-		  height: 16px;
-		
-		  margin: 0;
-		  border: none;
-		  border-radius: 4px;
-		
-		  background: #E6F0FF;
-		
-		  cursor: pointer;
-		
-		  display: inline-flex;
-		  align-items: center;
-		  justify-content: center;
-		
-		  flex: 0 0 16px;
-		
-		  transition: background 0.2s ease;
-		}
+          appearance: none;
+          -webkit-appearance: none;
+          width: 16px;
+          height: 16px;
+          margin: 0;
+          border: none;
+          border-radius: 4px;
+          background: #E6F0FF;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex: 0 0 16px;
+          transition: background 0.2s ease, box-shadow 0.2s ease;
+        }
 		
 		.legend-checkbox:hover {
 		  background: #D5E6FF;
@@ -99,14 +92,14 @@
 		}
 		
 		.legend-checkbox:checked::after {
-		  content: "";
-		  width: 5px;
-		  height: 10px;
-		  border-right: 2px solid #fff;
-		  border-bottom: 2px solid #fff;
-		  transform: rotate(45deg);
-		  display: block;
-		}
+          content: "";
+          width: 5px;
+          height: 10px;
+          border-right: 2px solid #fff;
+          border-bottom: 2px solid #fff;
+          transform: rotate(45deg);
+          display: block;
+        }
 
 		.legend-icon {
           width: 16px;
@@ -459,8 +452,8 @@
       </div>
 	  <div id="listings" class="listings"></div>
 	  </div>
-      <div id="legends" class="collapsed">
-        <button id="toggleLegend" type="button">Show legend</button>
+      <div id="legends">
+        <button id="toggleLegend" type="button">Hide legend</button>
 		<div class="legend-panel">
 		  <label class="legend-item">
 		    <input type="checkbox" class="legend-filter legend-checkbox" value="Breweries" checked />
