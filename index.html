@@ -61,21 +61,13 @@
         margin: 0;
       }
 
-      .legend-icon {
-        width: 20px;
-        height: 20px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex: 0 0 20px;
-      }
-
-      .legend-icon img {
-        width: 15px;
-        height: 15px;
-        display: block;
-        filter: brightness(0) invert(1);
-      }
+		.legend-icon {
+		  width: 18px;
+		  height: 18px;
+		  display: inline-block;
+		  vertical-align: middle;
+		  filter: brightness(0) invert(1);
+		}
 
       #legends.collapsed .legend-panel {
         display: none;
@@ -399,28 +391,31 @@
 	  </div>
       <div id="legends" class="collapsed">
         <button id="toggleLegend" type="button">Legend</button>
-        <div class="legend-panel">
-          <label class="legend-item">
-            <input type="checkbox" class="legend-filter" value="Breweries" checked />
-            <span class="legend-icon"><img src="https://cdn.jsdelivr.net/npm/@mapbox/maki@8.2.0/icons/ranger-station-15.svg" alt="" /></span>
-            <span>Breweries</span>
-          </label>
-          <label class="legend-item">
-            <input type="checkbox" class="legend-filter" value="Blenders" checked />
-            <span class="legend-icon"><img src="https://cdn.jsdelivr.net/npm/@mapbox/maki@8.2.0/icons/alcohol-shop-15.svg" alt="" /></span>
-            <span>Blenders</span>
-          </label>
-          <label class="legend-item">
-            <input type="checkbox" class="legend-filter" value="Museums" checked />
-            <span class="legend-icon"><img src="https://cdn.jsdelivr.net/npm/@mapbox/maki@8.2.0/icons/museum-15.svg" alt="" /></span>
-            <span>Museums</span>
-          </label>
-          <label class="legend-item">
-            <input type="checkbox" class="legend-filter" value="Bars, Cafes and Restaurants" checked />
-            <span class="legend-icon"><img src="https://cdn.jsdelivr.net/npm/@mapbox/maki@8.2.0/icons/beer-15.svg" alt="" /></span>
-            <span>Bars, Cafes, Restaurants</span>
-          </label>
-        </div>
+		<div class="legend-panel">
+		  <label class="legend-item">
+		    <input type="checkbox" class="legend-filter" value="Breweries" checked />
+		    <img src="icons/ranger-station-15.svg" class="legend-icon" alt="Breweries icon">
+		    <span>Breweries</span>
+		  </label>
+		
+		  <label class="legend-item">
+		    <input type="checkbox" class="legend-filter" value="Blenders" checked />
+		    <img src="icons/alcohol-shop-15.svg" class="legend-icon" alt="Blenders icon">
+		    <span>Blenders</span>
+		  </label>
+		
+		  <label class="legend-item">
+		    <input type="checkbox" class="legend-filter" value="Museums" checked />
+		    <img src="icons/museum-15.svg" class="legend-icon" alt="Museums icon">
+		    <span>Museums</span>
+		  </label>
+		
+		  <label class="legend-item">
+		    <input type="checkbox" class="legend-filter" value="Bars, Cafes and Restaurants" checked />
+		    <img src="icons/beer-15.svg" class="legend-icon" alt="Bars, Cafes and Restaurants icon">
+		    <span>Bars, Cafes and Restaurants</span>
+		  </label>
+		</div>
       </div>
     <div id="map" class="map"></div>
     <script>
