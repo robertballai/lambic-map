@@ -25,7 +25,7 @@
         bottom: 20px;
         right: 20px;
         background: rgba(255, 255, 255, 0.95);
-        padding: 4px 6px;
+        padding: 6px;
         border-radius: 6px;
         backdrop-filter: blur(4px);
         width: fit-content;
@@ -50,33 +50,27 @@
         margin-top: 8px;
       }
 
-		.legend-item {
-		  display: flex;
-		  align-items: center;
-		  gap: 6px;
-		  margin: 3px 0;
-		  padding: 3px 4px;
-		  color: #1B6EC0;
-		  font-size: 13px;
-		  cursor: pointer;
-		  border-radius: 6px;
-		}
-
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 6px 0;
+        color: #1B6EC0;
+        font-size: 13px;
+        cursor: pointer;
+		padding: 4px 6px;
+		border-radius: 6px;
+      }
 
 		.legend-item:hover {
   		  background: rgba(27, 110, 192, 0.06);
 		}
 
-		.legend-item span {
-  		  line-height: 1.15;
-		}
-
 		.legend-checkbox {
 		  appearance: none;
 		  -webkit-appearance: none;
-		  width: 16px;
-		  height: 16px;
-		  flex: 0 0 16px;
+		  width: 18px;
+		  height: 18px;
 		  margin: 0;
 		  border: none;
 		  border-radius: 4px;
@@ -85,6 +79,7 @@
 		  display: inline-flex;
 		  align-items: center;
 		  justify-content: center;
+		  flex: 0 0 18px;
 		  transition: background 0.2s ease, box-shadow 0.2s ease;
 		}
 		
@@ -234,60 +229,78 @@
       .mapboxgl-popup-close-button {
         display: none;
       }
-	 .mapboxgl-popup-content {
-		font: 400 15px/22px 'Courgette', 'Helvetica Neue', sans-serif;
-		padding: 0;
-		 max-width: none;
-		
-		border: 2px solid #77b0e9;
-		border-radius: 8px;
-		overflow: hidden;
-	  }
-		
-	 .mapboxgl-popup-content h3 {
-		background: #77b0e9;
-		color: #fff;
-		margin: 0;
-		padding: 10px;
-		font-weight: 700;
-	  }
 
-      .mapboxgl-popup-content h4 {
+      .mapboxgl-popup-content {
+        font: 400 15px/22px 'Courgette', 'Helvetica Neue', sans-serif;
+        padding: 0;
+        max-width: 300px;
+        border: 1px solid rgba(27, 110, 192, 0.18);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 24px rgba(0,0,0,0.16);
+        background: #fff;
+      }
+
+      .mapboxgl-popup-content h3 {
+        background: linear-gradient(180deg, #1B6EC0 0%, #2D7FD1 100%);
+        color: #fff;
         margin: 0;
-        padding: 10px;
-        font-weight: 400;
+        padding: 12px 14px 10px;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 1.25;
       }
 
-      .mapboxgl-popup-content div {
-        padding: 10px;
+      .popup-body {
+        padding: 12px 14px 14px;
       }
 
-	  .mapboxgl-popup-content {
-  		box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-	  }
-		
-		.popup-actions {
-		  margin-top: 10px;
-		  display: flex;
-		  gap: 8px;
-		  flex-wrap: wrap;
-		}
-		
-		.popup-button {
-		  display: inline-block;
-		  padding: 6px 10px;
-		  border-radius: 6px;
-		  background: #1B6EC0;
-		  color: #fff;
-		  text-decoration: none;
-		  font-size: 13px;
-		  line-height: 1.2;
-		}
-		
-		.popup-button:hover {
-		  opacity: 0.9;
-		  color: #fff;
-		}
+      .popup-type {
+        color: #1B6EC0;
+        font-size: 13px;
+        line-height: 1.2;
+        margin-bottom: 10px;
+        opacity: 0.9;
+      }
+
+      .popup-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .popup-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        padding: 7px 11px;
+        border-radius: 8px;
+        background: #1B6EC0;
+        color: #fff;
+        text-decoration: none;
+        font-size: 13px;
+        line-height: 1.1;
+        box-shadow: 0 2px 6px rgba(27,110,192,0.18);
+        transition: transform 0.12s ease, opacity 0.12s ease, background 0.12s ease;
+      }
+
+      .popup-button:hover {
+        opacity: 0.95;
+        color: #fff;
+        transform: translateY(-1px);
+      }
+
+      .popup-button.secondary {
+        background: #EAF3FF;
+        color: #1B6EC0;
+        box-shadow: none;
+      }
+
+      .popup-button.secondary:hover {
+        color: #1B6EC0;
+        background: #DCEBFF;
+      }
 		
       .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
         margin-top: 15px;
@@ -402,18 +415,16 @@
           padding: 12px 10px;
         }
 
-		#legends {
-		  top: 10px;
-		  left: 10px;
-		  right: auto;
-		  bottom: auto;
-		
-		  max-width: calc(100% - 20px);
-		  padding: 4px;
-		
-		  transform: scale(0.95);
-		  transform-origin: top left;
-		}
+        #legends {
+          right: 10px;
+          bottom: calc(42% + 10px);
+          max-width: calc(100% - 20px);
+          padding: 4px;
+        }
+
+        .sidebar.collapsed ~ #legends {
+          bottom: 10px;
+        }
 
         .mapboxgl-popup-content {
           max-width: 260px;
@@ -433,8 +444,8 @@
       </div>
 	  <div id="listings" class="listings"></div>
 	  </div>
-      <div id="legends">
-        <button id="toggleLegend" type="button">Hide legend</button>
+      <div id="legends" class="collapsed">
+        <button id="toggleLegend" type="button">Legend</button>
 		<div class="legend-panel">
 		  <label class="legend-item">
 		    <input type="checkbox" class="legend-filter legend-checkbox" value="Breweries" checked />
@@ -476,11 +487,11 @@
       const map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/robertballai/ckirv2uq80cly19qe6yjwu7n2',
+        center: [4.341, 50.810],
+        zoom: 10.5,
 		maxBounds: bounds // Set the map's geographical boundaries.
       });
 
-		map.fitBounds(bounds, { padding: 20, duration: 0 });
-		
       const activeFilters = new Set([
         'Breweries',
         'Blenders',
@@ -1583,17 +1594,29 @@
 		    currentFeature.properties.LINK &&
 		    currentFeature.properties.LINK !== 'N/A';
 		
+		  const hasDetails =
+		    currentFeature.properties.Details &&
+		    currentFeature.properties.Details !== 'N/A';
+		
 		  new mapboxgl.Popup({ closeOnClick: true })
 		    .setLngLat(currentFeature.geometry.coordinates)
 		    .setHTML(`
 		      <h3>${currentFeature.properties.NAME}</h3>
-		      <div class="popup-actions">
-		        ${
-		          hasWebsite
-		            ? `<a class="popup-button" href="${currentFeature.properties.LINK}" target="_blank" rel="noopener noreferrer">Site</a>`
-		            : ''
-		        }
-		        <a class="popup-button" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">Google Maps</a>
+		      <div class="popup-body">
+		        <div class="popup-type">${currentFeature.properties.TYPE}</div>
+		        <div class="popup-actions">
+		          ${
+		            hasWebsite
+		              ? `<a class="popup-button" href="${currentFeature.properties.LINK}" target="_blank" rel="noopener noreferrer">Website</a>`
+		              : ''
+		          }
+		          ${
+		            hasDetails
+		              ? `<a class="popup-button secondary" href="${currentFeature.properties.Details}" target="_blank" rel="noopener noreferrer">Details</a>`
+		              : ''
+		          }
+		          <a class="popup-button secondary" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">Google Maps</a>
+		        </div>
 		      </div>
 		    `)
 		    .addTo(map);
@@ -1683,11 +1706,7 @@
 		if (!legend || !button) return;
 		
 		button.addEventListener('click', () => {
-		  legend.classList.toggle('collapsed');
-		
-		  button.textContent = legend.classList.contains('collapsed')
-		    ? 'Show legend'
-		    : 'Hide legend';
+			legend.classList.toggle('collapsed');
 		});
 	   }
 		
