@@ -19,39 +19,58 @@
         -webkit-font-smoothing: antialiased;
       }
 
-		#legends {
-		  position: absolute;
-		  z-index: 1;
-		  bottom: 20px;
-		  right: 20px;
-		
-		  background: rgba(119, 176, 233, 0.75); /* transparent */
-		  padding: 4px; /* smaller */
-		  border-radius: 6px;
-		
-		  backdrop-filter: blur(4px); /* optional nice effect */
-		}
+      #legends {
+        position: absolute;
+        z-index: 1;
+        bottom: 20px;
+        right: 20px;
+        background: rgba(119, 176, 233, 0.8);
+        padding: 6px;
+        border-radius: 6px;
+        backdrop-filter: blur(4px);
+        min-width: 210px;
+      }
 
-		#legends img {
-		  max-width: 110px;
-		  display: block;
-		  margin-top: 4px;
-		}
-		
-		#toggleLegend {
-		  background: rgba(255, 255, 255, 0.9);
-		  color: #1B6EC0;
-		  border: none;
-		  border-radius: 6px;
-		  padding: 5px 7px;
-		  font-size: 11px;
-		  cursor: pointer;
-		}
-		
-		/* collapsed state */
-		#legends.collapsed img {
-		  display: none;
-		}
+      #toggleLegend {
+        background: rgba(255, 255, 255, 0.9);
+        color: #1B6EC0;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 8px;
+        font-size: 11px;
+        cursor: pointer;
+        width: 100%;
+        font-family: 'Courgette', 'Helvetica Neue', sans-serif;
+      }
+
+      .legend-panel {
+        margin-top: 8px;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 6px 0;
+        color: #fff;
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      .legend-item input {
+        margin: 0;
+      }
+
+      .legend-dot {
+        width: 20px;
+        text-align: center;
+        font-size: 16px;
+        line-height: 1;
+      }
+
+      #legends.collapsed .legend-panel {
+        display: none;
+      }
 		
       * {
         box-sizing: border-box;
@@ -164,14 +183,6 @@
 		  justify-content: center;
 		}
 		
-      .marker {
-        border: none;
-        cursor: pointer;
-        height: 56px;
-        width: 56px;
-        background-image: url(marker.png);
-      }
-
       /* Marker tweaks */
       .mapboxgl-popup {
         padding-bottom: 20px;
@@ -348,14 +359,6 @@
           padding: 12px 10px;
         }
 
-        .marker {
-          height: 42px;
-          width: 42px;
-          background-size: contain;
-          background-repeat: no-repeat;
-          background-position: center;
-        }
-
         #legends {
           right: 10px;
           bottom: calc(42% + 10px);
@@ -365,10 +368,6 @@
 
         .sidebar.collapsed ~ #legends {
           bottom: 10px;
-        }
-
-        #legends img {
-          max-width: 90px;
         }
 
         .mapboxgl-popup-content {
@@ -389,10 +388,31 @@
       </div>
 	  <div id="listings" class="listings"></div>
 	  </div>
-	  <div id="legends" class="collapsed">
-		<button id="toggleLegend">Legend</button>
-		<img src="lambic_legend_clean.jpg" />
-	  </div>
+      <div id="legends" class="collapsed">
+        <button id="toggleLegend" type="button">Legend</button>
+        <div class="legend-panel">
+          <label class="legend-item">
+            <input type="checkbox" class="legend-filter" value="Breweries" checked />
+            <span class="legend-dot">🍺</span>
+            <span>Breweries</span>
+          </label>
+          <label class="legend-item">
+            <input type="checkbox" class="legend-filter" value="Blenders" checked />
+            <span class="legend-dot">🧪</span>
+            <span>Blenders</span>
+          </label>
+          <label class="legend-item">
+            <input type="checkbox" class="legend-filter" value="Museums" checked />
+            <span class="legend-dot">🏛️</span>
+            <span>Museums</span>
+          </label>
+          <label class="legend-item">
+            <input type="checkbox" class="legend-filter" value="Bars, Cafes and Restaurants" checked />
+            <span class="legend-dot">🍻</span>
+            <span>Bars, Cafes, Restaurants</span>
+          </label>
+        </div>
+      </div>
     <div id="map" class="map"></div>
     <script>
       mapboxgl.accessToken = 'pk.eyJ1Ijoicm9iZXJ0YmFsbGFpIiwiYSI6ImNtbnJrMHp4dTAzNXIydW9tcnd1cWJod2gifQ.psK-o8PdmJjyfXMgUf552Q';
@@ -412,6 +432,13 @@
         zoom: 10.5,
 		maxBounds: bounds // Set the map's geographical boundaries.
       });
+
+      const activeFilters = new Set([
+        'Breweries',
+        'Blenders',
+        'Museums',
+        'Bars, Cafes and Restaurants'
+      ]);
 	  
       /**
        * Add map controls
@@ -1372,75 +1399,48 @@
        * Wait until the map loads to make changes to the map.
        */
       map.on('load', () => {
-        /**
-         * This is where your '.addLayer()' used to be, instead
-         * add only the source without styling a layer
-         */
         map.addSource('places', {
           'type': 'geojson',
           'data': stores
         });
 
-        /**
-         * Add all the things to the page:
-         * - The location listings on the side of the page
-         * - The markers onto the map
-         */
+        map.addLayer({
+          id: 'places-symbols',
+          type: 'symbol',
+          source: 'places',
+          layout: {
+            'icon-image': [
+              'match',
+              ['get', 'TYPE'],
+              'Breweries', 'ranger-station-15',
+              'Blenders', 'alcohol-shop-15',
+              'Museums', 'museum-15',
+              'Bars, Cafes and Restaurants', 'beer-15',
+              'marker-15'
+            ],
+            'icon-size': 1.4,
+            'icon-allow-overlap': true
+          }
+        });
+
         buildLocationList(stores);
-        addMarkers();
+        setupMapInteractions();
+        setupLegendFilters();
+        applyFilters();
       });
 
-      /**
-       * Add a marker to the map for every store listing.
-       **/
-      function addMarkers() {
-        /* For each feature in the GeoJSON object above: */
-        for (const marker of stores.features) {
-          /* Create a div element for the marker. */
-          const el = document.createElement('div');
-          /* Assign a unique `id` to the marker. */
-          el.id = `marker-${marker.properties.id}`;
-          /* Assign the `marker` class to each marker for styling. */
-          el.className = 'marker';
+      function updateMapFilter() {
+        const active = Array.from(activeFilters);
 
-          /**
-           * Create a marker using the div element
-           * defined above and add it to the map.
-           **/
-          new mapboxgl.Marker(el, { offset: [0, -23] })
-            .setLngLat(marker.geometry.coordinates)
-            .addTo(map);
-
-          /**
-           * Listen to the element and when it is clicked, do three things:
-           * 1. Fly to the point
-           * 2. Close all other popups and display popup for clicked store
-           * 3. Highlight listing in sidebar (and remove highlight for all other listings)
-           **/
-          el.addEventListener('click', (e) => {
-            /* Fly to the point */
-            flyToStore(marker);
-            /* Close all other popups and display popup for clicked store */
-            createPopUp(marker);
-            /* Highlight listing in sidebar */
-            const activeItem = document.getElementsByClassName('active');
-            e.stopPropagation();
-            if (activeItem[0]) {
-              activeItem[0].classList.remove('active');
-            }
-            const listing = document.getElementById(
-              `listing-${marker.properties.id}`
-            );
-            listing.classList.add('active');
-          });
+        if (active.length === 0) {
+          map.setFilter('places-symbols', ['==', ['get', 'TYPE'], '__none__']);
+          return;
         }
+
+        map.setFilter('places-symbols', ['in', ['get', 'TYPE'], ['literal', active]]);
       }
 
-
-      /**
-       * Filter the sidebar listings by place name.
-       **/
-      function filterListings() {
+      function applyFilters() {
         const searchValue = document
           .getElementById('searchInput')
           .value.toLowerCase()
@@ -1450,12 +1450,18 @@
           const listing = document.getElementById(`listing-${store.properties.id}`);
           if (!listing) continue;
 
-          const storeName = store.properties.NAME.toLowerCase();
-          listing.style.display = storeName.includes(searchValue) ? 'block' : 'none';
+          const matchesSearch = store.properties.NAME.toLowerCase().includes(searchValue);
+          const matchesType = activeFilters.has(store.properties.TYPE);
+          const isVisible = matchesSearch && matchesType;
+
+          listing.style.display = isVisible ? 'block' : 'none';
+          if (!isVisible) listing.classList.remove('active');
         }
+
+        updateMapFilter();
       }
 
-      document.getElementById('searchInput').addEventListener('input', filterListings);
+      document.getElementById('searchInput').addEventListener('input', applyFilters);
 
       /**
        * Add a listing for each store to the sidebar.
@@ -1545,6 +1551,50 @@
 		    `)
 		    .addTo(map);
 		}
+
+      function setupMapInteractions() {
+        map.on('click', 'places-symbols', (e) => {
+          const feature = e.features && e.features[0];
+          if (!feature) return;
+
+          flyToStore(feature);
+          createPopUp(feature);
+
+          const activeItem = document.getElementsByClassName('active');
+          if (activeItem[0]) {
+            activeItem[0].classList.remove('active');
+          }
+
+          const listing = document.getElementById(`listing-${feature.properties.id}`);
+          if (listing && listing.style.display !== 'none') {
+            listing.classList.add('active');
+          }
+        });
+
+        map.on('mouseenter', 'places-symbols', () => {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+
+        map.on('mouseleave', 'places-symbols', () => {
+          map.getCanvas().style.cursor = '';
+        });
+      }
+
+      function setupLegendFilters() {
+        const checkboxes = document.querySelectorAll('.legend-filter');
+
+        checkboxes.forEach((checkbox) => {
+          checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+              activeFilters.add(checkbox.value);
+            } else {
+              activeFilters.delete(checkbox.value);
+            }
+
+            applyFilters();
+          });
+        });
+      }
 
       /**
        * Mobile sidebar toggle
