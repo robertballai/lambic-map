@@ -1618,7 +1618,16 @@
 		    .setHTML(`
 		      <h3>${currentFeature.properties.NAME}</h3>
 		      <div class="popup-body">
-		        <div class="popup-type">${currentFeature.properties.TYPE}</div>
+		        <div class="popup-type">
+				  ${
+				    {
+				      'Breweries': 'Brewery',
+				      'Blenders': 'Blender',
+				      'Museums': 'Museum',
+				      'Bars, Cafes and Restaurants': 'Bar / Café / Restaurant'
+				    }[currentFeature.properties.TYPE] || currentFeature.properties.TYPE
+				  }
+				</div>
 				<div class="popup-actions">
 				  ${
 				    hasDetails
