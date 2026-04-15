@@ -61,11 +61,20 @@
         margin: 0;
       }
 
-      .legend-dot {
+      .legend-icon {
         width: 20px;
-        text-align: center;
-        font-size: 16px;
-        line-height: 1;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 20px;
+      }
+
+      .legend-icon img {
+        width: 15px;
+        height: 15px;
+        display: block;
+        filter: brightness(0) invert(1);
       }
 
       #legends.collapsed .legend-panel {
@@ -393,22 +402,22 @@
         <div class="legend-panel">
           <label class="legend-item">
             <input type="checkbox" class="legend-filter" value="Breweries" checked />
-            <span class="legend-dot">🍺</span>
+            <span class="legend-icon"><img src="https://cdn.jsdelivr.net/npm/@mapbox/maki@8.2.0/icons/ranger-station-15.svg" alt="" /></span>
             <span>Breweries</span>
           </label>
           <label class="legend-item">
             <input type="checkbox" class="legend-filter" value="Blenders" checked />
-            <span class="legend-dot">🧪</span>
+            <span class="legend-icon"><img src="https://cdn.jsdelivr.net/npm/@mapbox/maki@8.2.0/icons/alcohol-shop-15.svg" alt="" /></span>
             <span>Blenders</span>
           </label>
           <label class="legend-item">
             <input type="checkbox" class="legend-filter" value="Museums" checked />
-            <span class="legend-dot">🏛️</span>
+            <span class="legend-icon"><img src="https://cdn.jsdelivr.net/npm/@mapbox/maki@8.2.0/icons/museum-15.svg" alt="" /></span>
             <span>Museums</span>
           </label>
           <label class="legend-item">
             <input type="checkbox" class="legend-filter" value="Bars, Cafes and Restaurants" checked />
-            <span class="legend-dot">🍻</span>
+            <span class="legend-icon"><img src="https://cdn.jsdelivr.net/npm/@mapbox/maki@8.2.0/icons/beer-15.svg" alt="" /></span>
             <span>Bars, Cafes, Restaurants</span>
           </label>
         </div>
