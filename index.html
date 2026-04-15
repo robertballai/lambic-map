@@ -480,11 +480,11 @@
       const map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/robertballai/ckirv2uq80cly19qe6yjwu7n2',
-        center: [4.341, 50.810],
-        zoom: 10.5,
 		maxBounds: bounds // Set the map's geographical boundaries.
       });
 
+		map.fitBounds(bounds, { padding: 20, duration: 0 });
+		
       const activeFilters = new Set([
         'Breweries',
         'Blenders',
