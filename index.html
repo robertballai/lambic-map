@@ -1611,19 +1611,19 @@
 		      <h3>${currentFeature.properties.NAME}</h3>
 		      <div class="popup-body">
 		        <div class="popup-type">${currentFeature.properties.TYPE}</div>
-		        <div class="popup-actions">
-		          ${
-		            hasWebsite
-		              ? `<a class="popup-button" href="${currentFeature.properties.LINK}" target="_blank" rel="noopener noreferrer">Website</a>`
-		              : ''
-		          }
-		          ${
-		            hasDetails
-		              ? `<a class="popup-button secondary" href="${currentFeature.properties.Details}" target="_blank" rel="noopener noreferrer">Details</a>`
-		              : ''
-		          }
-		          <a class="popup-button secondary" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">Google Maps</a>
-		        </div>
+				<div class="popup-actions">
+				  ${
+				    hasDetailsLink
+				      ? `<a class="popup-button secondary" href="${currentFeature.properties.Details}" target="_blank" rel="noopener noreferrer">Details</a>`
+				      : ''
+				  }
+				  ${
+				    hasWebsite
+				      ? `<a class="popup-button" href="${currentFeature.properties.LINK}" target="_blank" rel="noopener noreferrer">Link</a>`
+				      : ''
+				  }
+				  <a class="popup-button secondary" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">Location</a>
+				</div>
 		      </div>
 		    `)
 		    .addTo(map);
