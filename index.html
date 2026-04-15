@@ -416,10 +416,16 @@
         }
 
         #legends {
-          right: 10px;
-          bottom: calc(42% + 10px);
+          top: 10px;
+          left: 10px;
+          right: auto;
+          bottom: auto;
+
           max-width: calc(100% - 20px);
           padding: 4px;
+
+          transform: scale(0.95);
+          transform-origin: top left;
         }
 
         .sidebar.collapsed ~ #legends {
