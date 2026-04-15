@@ -58,11 +58,46 @@
         color: #1B6EC0;
         font-size: 13px;
         cursor: pointer;
+		padding: 4px 6px;
+		border-radius: 6px;
       }
 
-      .legend-item input {
-        margin: 0;
-      }
+		.legend-item:hover {
+  		  background: rgba(27, 110, 192, 0.06);
+		}
+
+		.legend-checkbox {
+		  appearance: none;
+		  -webkit-appearance: none;
+		  width: 18px;
+		  height: 18px;
+		  margin: 0;
+		  border: none;
+		  border-radius: 4px;
+		  background: #E6F0FF;
+		  cursor: pointer;
+		  display: inline-flex;
+		  align-items: center;
+		  justify-content: center;
+		  flex: 0 0 18px;
+		  transition: background 0.2s ease, box-shadow 0.2s ease;
+		}
+		
+		.legend-checkbox:hover {
+		  background: #D5E6FF;
+		}
+		
+		.legend-checkbox:checked {
+		  background: #1B6EC0;
+		}
+		
+		.legend-checkbox:checked::after {
+		  content: "✓";
+		  color: #ffffff;
+		  font-size: 13px;
+		  font-weight: 700;
+		  line-height: 1;
+		}
 
 		.legend-icon {
 		  width: 18px;
@@ -395,25 +430,25 @@
         <button id="toggleLegend" type="button">Legend</button>
 		<div class="legend-panel">
 		  <label class="legend-item">
-		    <input type="checkbox" class="legend-filter" value="Breweries" checked />
+		    <input type="checkbox" class="legend-filter legend-checkbox" value="Breweries" checked />
 		    <img src="icons/ranger-station-15.svg" class="legend-icon" alt="Breweries icon">
 		    <span>Breweries</span>
 		  </label>
 		
 		  <label class="legend-item">
-		    <input type="checkbox" class="legend-filter" value="Blenders" checked />
+		    <input type="checkbox" class="legend-filter legend-checkbox" value="Blenders" checked />
 		    <img src="icons/alcohol-shop-15.svg" class="legend-icon" alt="Blenders icon">
 		    <span>Blenders</span>
 		  </label>
 		
 		  <label class="legend-item">
-		    <input type="checkbox" class="legend-filter" value="Museums" checked />
+		    <input type="checkbox" class="legend-filter legend-checkbox" value="Museums" checked />
 		    <img src="icons/museum-15.svg" class="legend-icon" alt="Museums icon">
 		    <span>Museums</span>
 		  </label>
 		
 		  <label class="legend-item">
-		    <input type="checkbox" class="legend-filter" value="Bars, Cafes and Restaurants" checked />
+		    <input type="checkbox" class="legend-filter legend-checkbox" value="Bars, Cafes and Restaurants" checked />
 		    <img src="icons/beer-15.svg" class="legend-icon" alt="Bars, Cafes and Restaurants icon">
 		    <span>Bars, Cafes and<br>Restaurants</span>
 		  </label>
