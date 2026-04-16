@@ -1802,7 +1802,7 @@ function formatType(type) {
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
 
   const hasWebsite = p.LINK && p.LINK !== 'N/A';
-  const hasDetails = p.Details && p.Details !== 'N/A';
+  const hasDetails = p.DETAILS && p.DETAILS !== 'N/A';
 
   const tipLine = p.TIPS ? `<div><strong>Tip:</strong> ${escapeHtml(p.TIPS)}</div>` : '';
   const hasTip = !!p.TIPS;
@@ -1850,7 +1850,7 @@ function formatType(type) {
         ` : ''}
 
         <div class="popup-actions">
-          ${hasDetails ? `<a class="popup-button secondary" href="${p.Details}" target="_blank" rel="noopener noreferrer">Details</a>` : ''}
+          ${hasDetails ? `<a class="popup-button secondary" href="${p.DETAILS}" target="_blank" rel="noopener noreferrer">Details</a>` : ''}
           ${hasWebsite ? `<a class="popup-button" href="${p.LINK}" target="_blank" rel="noopener noreferrer">${externalLinkLabel(p.LINK)}</a>` : ''}
           <a class="popup-button secondary" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">Location</a>
         </div>
