@@ -390,6 +390,45 @@
         border-color: #1B6EC0;
       }
 
+      .search-wrapper {
+        position: relative;
+      }
+
+      #searchInput {
+        padding-right: 34px;
+      }
+
+      #clearSearch {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%) scale(0.92);
+        border: none;
+        background: #EAF3FF;
+        color: #1B6EC0;
+        border-radius: 50%;
+        width: 22px;
+        height: 22px;
+        font-size: 14px;
+        cursor: pointer;
+        display: block;
+        opacity: 0;
+        pointer-events: none;
+        line-height: 1;
+        transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+      }
+
+      #clearSearch.visible {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(-50%) scale(1);
+      }
+
+      #clearSearch:hover {
+        background: #DCEBFF;
+      }
+
+
     
       #toggleSidebar {
         display: none;
@@ -522,7 +561,10 @@
         <button id="toggleSidebar" type="button">Hide list</button>
       </div>
       <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search places by name..." />
+        <div class="search-wrapper">
+          <input type="text" id="searchInput" placeholder="Search places by name..." />
+          <button id="clearSearch" type="button">×</button>
+        </div>
       </div>
 	  <div id="listings" class="listings"></div>
 	  </div>
@@ -1618,6 +1660,21 @@
       }
 
       document.getElementById('searchInput').addEventListener('input', applyFilters);
+
+const searchInput = document.getElementById('searchInput');
+const clearButton = document.getElementById('clearSearch');
+
+searchInput.addEventListener('input', () => {
+  clearButton.classList.toggle('visible', !!searchInput.value);
+});
+
+clearButton.addEventListener('click', () => {
+  searchInput.value = '';
+  clearButton.classList.remove('visible');
+  applyFilters();
+  searchInput.focus();
+});
+
 
       /**
        * Add a listing for each store to the sidebar.
