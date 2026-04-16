@@ -260,6 +260,44 @@
         padding: 12px 14px 14px;
       }
 
+      .popup-meta-chips {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+
+      .popup-meta-chip {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        padding: 5px 10px;
+        border-radius: 999px;
+        background: #F4F8FF;
+        border: 1px solid rgba(27,110,192,0.14);
+        color: #1B6EC0;
+        font-size: 12px;
+        line-height: 1;
+      }
+
+      .popup-tip-box {
+        margin-bottom: 8px;
+        padding: 9px 11px;
+        background: #F4F8FF;
+        border-radius: 10px;
+        border: 1px solid rgba(27,110,192,0.08);
+        font-size: 13px;
+        line-height: 1.35;
+        color: #28415f;
+      }
+
+      .popup-info-line {
+        margin-bottom: 6px;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #28415f;
+      }
+
       .popup-type {
         color: #1B6EC0;
         font-size: 13px;
@@ -272,6 +310,7 @@
         display: flex;
         gap: 8px;
         flex-wrap: wrap;
+        margin-top: 2px;
       }
 
 		.popup-icon {
@@ -288,14 +327,15 @@
         justify-content: center;
         min-height: 34px;
         padding: 7px 11px;
-        border-radius: 8px;
+        border-radius: 10px;
         background: #1B6EC0;
         color: #fff;
         text-decoration: none;
         font-size: 13px;
         line-height: 1.1;
-        box-shadow: 0 2px 6px rgba(27,110,192,0.18);
+        box-shadow: 0 2px 6px rgba(27,110,192,0.16);
         transition: transform 0.12s ease, opacity 0.12s ease, background 0.12s ease;
+        flex: 1 1 0;
       }
 
       .popup-button:hover {
@@ -1671,7 +1711,23 @@
       }
 
 
-      function formatType(type) {
+      
+function haversineKm(a, b){
+  const toRad = d => d*Math.PI/180;
+  const [lng1, lat1] = a;
+  const [lng2, lat2] = b;
+  const R = 6371;
+  const dLat = toRad(lat2-lat1);
+  const dLng = toRad(lng2-lng1);
+  const x = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*(Math.sin(dLng/2)**2);
+  return 2*R*Math.atan2(Math.sqrt(x), Math.sqrt(1-x));
+}
+function distanceFromBrussels(feature){
+  const bxl = [4.3517,50.8503];
+  return Math.round(haversineKm(feature.geometry.coordinates, bxl)) + " km from Brussels";
+}
+
+function formatType(type) {
         return {
           'Breweries': 'Brewery',
           'Blenders': 'Blender',
@@ -1719,24 +1775,29 @@
       <h3>${escapeHtml(p.NAME)}</h3>
       <div class="popup-body">
 
-        <div class="popup-type" style="margin-bottom:8px;">
-          ${escapeHtml(formatType(p.TYPE))}
+        <div class="popup-meta-chips">
+          <div class="popup-meta-chip">
+            ${escapeHtml(formatType(p.TYPE))}
+          </div>
+          <div class="popup-meta-chip">
+            ${distanceFromBrussels(currentFeature)}
+          </div>
         </div>
 
         ${hasTip ? `
-          <div style="margin-bottom:8px; padding:8px 10px; background:#F4F8FF; border-radius:8px; font-size:14px;">
+          <div class="popup-tip-box">
             ${tipLine}
           </div>
         ` : ''}
 
         ${hasAccess ? `
-          <div style="margin-bottom:6px; font-size:13px; color:#28415f;">
+          <div class="popup-info-line">
             <strong>Access:</strong> ${escapeHtml(p.ACCESS)}
           </div>
         ` : ''}
 
         ${hasHours ? `
-          <div style="margin-bottom:8px; font-size:13px; color:#28415f;">
+          <div class="popup-info-line">
             <strong>Hours:</strong> ${escapeHtml(p.HOURS)}
           </div>
         ` : ''}
