@@ -280,6 +280,14 @@
         line-height: 1;
       }
 
+      .popup-chip-image {
+        width: 14px;
+        height: 14px;
+        margin-right: 6px;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
       .popup-tip-box {
         margin-bottom: 8px;
         padding: 9px 11px;
@@ -1726,6 +1734,22 @@ function distanceFromBrussels(feature){
   const bxl = [4.3517,50.8503];
   return Math.round(haversineKm(feature.geometry.coordinates, bxl)) + " km from Brussels";
 }
+function typeIconPath(type){
+  return {
+    'Breweries': 'icons/ranger-station-15.svg',
+    'Blenders': 'icons/alcohol-shop-15.svg',
+    'Museums': 'icons/museum-15.svg',
+    'Bars, Cafes and Restaurants': 'icons/beer-15.svg'
+  }[type] || 'icons/marker-15.svg';
+}
+
+function externalLinkLabel(url){
+  if (!url) return 'Link';
+  const lower = String(url).toLowerCase();
+  if (lower.includes('instagram.com')) return 'Instagram';
+  if (lower.includes('facebook.com')) return 'Facebook';
+  return 'Link';
+}
 
 function formatType(type) {
         return {
@@ -1777,9 +1801,11 @@ function formatType(type) {
 
         <div class="popup-meta-chips">
           <div class="popup-meta-chip">
+            <img src="${typeIconPath(p.TYPE)}" alt="" class="popup-chip-image">
             ${escapeHtml(formatType(p.TYPE))}
           </div>
           <div class="popup-meta-chip">
+            <img src="icons/marker-15.svg" alt="" class="popup-chip-image">
             ${distanceFromBrussels(currentFeature)}
           </div>
         </div>
@@ -1804,7 +1830,7 @@ function formatType(type) {
 
         <div class="popup-actions">
           ${hasDetails ? `<a class="popup-button secondary" href="${p.Details}" target="_blank" rel="noopener noreferrer">Details</a>` : ''}
-          ${hasWebsite ? `<a class="popup-button" href="${p.LINK}" target="_blank" rel="noopener noreferrer">Website</a>` : ''}
+          ${hasWebsite ? `<a class="popup-button" href="${p.LINK}" target="_blank" rel="noopener noreferrer">${externalLinkLabel(p.LINK)}</a>` : ''}
           <a class="popup-button secondary" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">Location</a>
         </div>
 
