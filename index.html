@@ -318,7 +318,7 @@
         display: flex;
         gap: 8px;
         flex-wrap: wrap;
-        margin-top: 2px;
+        margin-top: 6px;
       }
 
 		.popup-icon {
@@ -1851,8 +1851,8 @@ function formatType(type) {
 
         <div class="popup-actions">
           ${hasDetails ? `<a class="popup-button secondary" href="${p.DETAILS}" target="_blank" rel="noopener noreferrer">Details</a>` : ''}
-          ${hasWebsite ? `<a class="popup-button" href="${p.LINK}" target="_blank" rel="noopener noreferrer">${externalLinkLabel(p.LINK)}</a>` : ''}
-          <a class="popup-button secondary" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">Location</a>
+          ${hasWebsite ? `<a class="popup-button secondary" href="${p.LINK}" target="_blank" rel="noopener noreferrer">${externalLinkLabel(p.LINK)}</a>` : ''}
+          <a class="popup-button" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">Location</a>
         </div>
 
       </div>
