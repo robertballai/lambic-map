@@ -1595,12 +1595,59 @@
         });
       }
 	  
+
+      function isMobile() {
+        return window.innerWidth <= 900;
+      }
+
+      function closeSidebarMobile() {
+        const sidebar = document.querySelector('.sidebar');
+        const toggleButton = document.getElementById('toggleSidebar');
+
+        if (!sidebar || !toggleButton) return;
+
+        if (isMobile()) {
+          sidebar.classList.add('collapsed');
+          toggleButton.textContent = 'Show list';
+          setTimeout(() => map.resize(), 250);
+        }
+      }
+
+      function collapseLegendMobile() {
+        const legend = document.getElementById('legends');
+        const button = document.getElementById('toggleLegend');
+
+        if (!legend || !button) return;
+
+        if (isMobile()) {
+          legend.classList.add('collapsed');
+          button.textContent = 'Show legend';
+        }
+      }
+
+      function expandLegendMobile() {
+        const legend = document.getElementById('legends');
+        const button = document.getElementById('toggleLegend');
+
+        if (!legend || !button) return;
+
+        if (isMobile()) {
+          legend.classList.remove('collapsed');
+          button.textContent = 'Hide legend';
+        }
+      }
+
       /**
        * Create a Mapbox GL JS `Popup`.
        **/
 		function createPopUp(currentFeature) {
 		  const popUps = document.getElementsByClassName('mapboxgl-popup');
 		  if (popUps[0]) popUps[0].remove();
+		
+		  if (isMobile()) {
+		    closeSidebarMobile();
+		    collapseLegendMobile();
+		  }
 		
 		  const [lng, lat] = currentFeature.geometry.coordinates;
 		  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
@@ -1613,7 +1660,7 @@
 		    currentFeature.properties.Details &&
 		    currentFeature.properties.Details !== 'N/A';
 		
-		  new mapboxgl.Popup({ closeOnClick: true })
+		  const popup = new mapboxgl.Popup({ closeOnClick: true })
 		    .setLngLat(currentFeature.geometry.coordinates)
 		    .setHTML(`
 		      <h3>${currentFeature.properties.NAME}</h3>
@@ -1671,6 +1718,10 @@
 		      </div>
 		    `)
 		    .addTo(map);
+
+		  popup.on('close', () => {
+		    expandLegendMobile();
+		  });
 		}
 
       function setupMapInteractions() {
