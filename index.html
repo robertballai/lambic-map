@@ -1649,17 +1649,26 @@
            * 3. Close all other popups and display popup for clicked store
            * 4. Highlight listing in sidebar (and remove highlight for all other listings)
            **/
-          link.addEventListener('click', function () {
+          link.addEventListener('click', function (e) {
+            e.preventDefault();
+
             for (const feature of stores.features) {
               if (this.id === `link-${feature.properties.id}`) {
+                if (isMobile()) {
+                  closeSidebarMobile();
+                  collapseLegendMobile();
+                }
+
                 flyToStore(feature);
                 createPopUp(feature);
               }
             }
+
             const activeItem = document.getElementsByClassName('active');
             if (activeItem[0]) {
               activeItem[0].classList.remove('active');
             }
+
             this.parentNode.classList.add('active');
           });
         }
