@@ -1916,21 +1916,32 @@ function formatType(type) {
 
         if (!sidebar || !toggleButton) return;
 
+        let wasMobile = window.innerWidth <= 900;
+
+        function syncToggleLabel() {
+          toggleButton.textContent = sidebar.classList.contains('collapsed')
+            ? 'Show list'
+            : 'Hide list';
+        }
+
         function applyMobileState() {
-          if (window.innerWidth <= 900) {
+          const isNowMobile = window.innerWidth <= 900;
+
+          if (!isNowMobile) {
             sidebar.classList.remove('collapsed');
-            toggleButton.textContent = 'Hide list';
-          } else {
+          } else if (!wasMobile && isNowMobile) {
+            // Only reset when entering mobile from desktop.
             sidebar.classList.remove('collapsed');
           }
+
+          syncToggleLabel();
+          wasMobile = isNowMobile;
           map.resize();
         }
 
         toggleButton.addEventListener('click', () => {
           sidebar.classList.toggle('collapsed');
-          toggleButton.textContent = sidebar.classList.contains('collapsed')
-            ? 'Show list'
-            : 'Hide list';
+          syncToggleLabel();
           setTimeout(() => map.resize(), 250);
         });
 
