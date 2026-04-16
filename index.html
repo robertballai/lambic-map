@@ -445,9 +445,15 @@
           max-width: 260px;
         }
 
-        .mapboxgl-ctrl-bottom-right,
-        .mapboxgl-ctrl-bottom-left {
+        /* Adjust Mapbox controls based on sidebar state */
+        .sidebar.collapsed ~ .map .mapboxgl-ctrl-bottom-right,
+        .sidebar.collapsed ~ .map .mapboxgl-ctrl-bottom-left {
           bottom: 74px;
+        }
+
+        .sidebar:not(.collapsed) ~ .map .mapboxgl-ctrl-bottom-right,
+        .sidebar:not(.collapsed) ~ .map .mapboxgl-ctrl-bottom-left {
+          bottom: 10px;
         }
 
         .mapboxgl-ctrl-bottom-right {
