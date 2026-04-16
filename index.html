@@ -1731,8 +1731,14 @@ function haversineKm(a, b){
   return 2*R*Math.atan2(Math.sqrt(x), Math.sqrt(1-x));
 }
 function distanceFromBrussels(feature){
-  const bxl = [4.3517,50.8503];
-  return Math.round(haversineKm(feature.geometry.coordinates, bxl)) + " km from Brussels";
+  const bxl = [4.3517, 50.8503];
+  const km = haversineKm(feature.geometry.coordinates, bxl);
+
+  if (km < 1) {
+    return "Central Brussels";
+  }
+
+  return Math.round(km) + " km from Brussels";
 }
 function typeIconPath(type){
   return {
@@ -1805,7 +1811,12 @@ function formatType(type) {
             ${escapeHtml(formatType(p.TYPE))}
           </div>
           <div class="popup-meta-chip">
-            <img src="icons/marker-15.svg" alt="" class="popup-chip-image">
+            <span class="popup-chip-image" style="width:14px;height:14px;margin-right:6px;display:inline-flex;align-items:center;justify-content:center;">
+              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                <path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z" fill="currentColor"></path>
+                <circle cx="12" cy="9" r="2.5" fill="#fff"></circle>
+              </svg>
+            </span>
             ${distanceFromBrussels(currentFeature)}
           </div>
         </div>
