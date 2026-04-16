@@ -444,6 +444,19 @@
         .mapboxgl-popup-content {
           max-width: 260px;
         }
+
+        .mapboxgl-ctrl-bottom-right,
+        .mapboxgl-ctrl-bottom-left {
+          bottom: 74px;
+        }
+
+        .mapboxgl-ctrl-bottom-right {
+          right: 10px;
+        }
+
+        .mapboxgl-ctrl-bottom-left {
+          left: 10px;
+        }
       }
 
     </style>
@@ -502,7 +515,8 @@
       const map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/robertballai/ckirv2uq80cly19qe6yjwu7n2',
-        maxBounds: bounds // Set the map's geographical boundaries.
+        maxBounds: bounds, // Set the map's geographical boundaries.
+        attributionControl: false
       });
 
       map.fitBounds(bounds, { padding: 20, duration: 0 });
@@ -518,6 +532,10 @@
        * Add map controls
        */
 		map.addControl(new mapboxgl.NavigationControl());
+		map.addControl(
+		  new mapboxgl.AttributionControl({ compact: true }),
+		  'bottom-right'
+		);
 		setTimeout(() => {
 		  const ctrlGroup = document.querySelector('.mapboxgl-ctrl-group');
 		  if (!ctrlGroup) return;
