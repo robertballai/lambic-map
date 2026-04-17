@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Lambic Places - Brussels Area</title>
+    <title>Lambic Places – Belgium</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
 	<link href='https://fonts.googleapis.com/css?family=Courgette' rel='stylesheet'>
@@ -150,6 +150,14 @@
         padding: 20px 2px;
       }
 
+      .subtitle {
+        display: block;
+        font-size: 13px;
+        font-weight: 400;
+        opacity: 0.75;
+        font-style: italic;
+      }
+
       a {
         color: #404040;
         text-decoration: none;
@@ -163,8 +171,8 @@
         background: #fff;
         border-bottom: 1px solid #eee;
         min-height: 60px;
-        line-height: 60px;
-        padding: 0 10px;
+        line-height: 1.2;
+        padding: 10px 10px;
         background-color: #1B6EC0;
         color: #fff;
       }
@@ -557,7 +565,10 @@
   <body>
     <div class="sidebar">
       <div class="heading">
-        <h1>Lambic Places - Brussels Area</h1>
+        <h1>
+  Lambic Places – Belgium<br>
+  <span class="subtitle">Curated list, not exhaustive</span>
+</h1>
         <button id="toggleSidebar" type="button">Hide list</button>
       </div>
       <div class="search-container">
