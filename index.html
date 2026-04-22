@@ -294,6 +294,12 @@
         line-height: 1;
       }
 
+      .popup-meta-chip.access-chip {
+        background: #EEF7EE;
+        border-color: rgba(52, 146, 62, 0.16);
+        color: #2F8A3A;
+      }
+
       .popup-chip-image {
         width: 14px;
         height: 14px;
@@ -306,6 +312,17 @@
         margin-bottom: 8px;
         padding: 9px 11px;
         background: #F4F8FF;
+        border-radius: 10px;
+        border: 1px solid rgba(27,110,192,0.08);
+        font-size: 13px;
+        line-height: 1.35;
+        color: #28415f;
+      }
+
+      .popup-note-box {
+        margin-bottom: 8px;
+        padding: 9px 11px;
+        background: #F9FBFE;
         border-radius: 10px;
         border: 1px solid rgba(27,110,192,0.08);
         font-size: 13px;
@@ -1877,11 +1894,10 @@ function formatType(type) {
 
   const hasWebsite = p.LINK && p.LINK !== 'N/A';
   const hasDetails = p.DETAILS && p.DETAILS !== 'N/A';
-
-  const tipLine = p.TIPS ? `<div><strong>Tip:</strong> ${escapeHtml(p.TIPS)}</div>` : '';
-  const hasTip = !!p.TIPS;
+  const hasTip = p.TIPS && p.TIPS.trim() !== '';
   const hasAccess = p.ACCESS && p.ACCESS.trim() !== '';
   const hasHours = p.HOURS && p.HOURS.trim() !== '';
+  const hasNote = p.NOTE && p.NOTE.trim() !== '';
 
   const popup = new mapboxgl.Popup({ closeOnClick: true })
     .setLngLat(currentFeature.geometry.coordinates)
@@ -1894,32 +1910,29 @@ function formatType(type) {
             <img src="${typeIconPath(p.TYPE)}" alt="" class="popup-chip-image">
             ${escapeHtml(formatType(p.TYPE))}
           </div>
-          <div class="popup-meta-chip">
-            <span class="popup-chip-image" style="width:14px;height:14px;margin-right:6px;display:inline-flex;align-items:center;justify-content:center;">
-              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-                <path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z" fill="currentColor"></path>
-                <circle cx="12" cy="9" r="2.5" fill="#fff"></circle>
-              </svg>
-            </span>
-            ${distanceFromBrussels(currentFeature)}
-          </div>
+
+          ${hasAccess ? `
+            <div class="popup-meta-chip access-chip">
+              ${escapeHtml(p.ACCESS)}
+            </div>
+          ` : ''}
         </div>
 
         ${hasTip ? `
           <div class="popup-tip-box">
-            ${tipLine}
-          </div>
-        ` : ''}
-
-        ${hasAccess ? `
-          <div class="popup-info-line">
-            <strong>Access:</strong> ${escapeHtml(p.ACCESS)}
+            <strong>Tip:</strong> ${escapeHtml(p.TIPS)}
           </div>
         ` : ''}
 
         ${hasHours ? `
           <div class="popup-info-line">
             <strong>Hours:</strong> ${escapeHtml(p.HOURS)}
+          </div>
+        ` : ''}
+
+        ${hasNote ? `
+          <div class="popup-note-box">
+            <strong>Note:</strong> ${escapeHtml(p.NOTE)}
           </div>
         ` : ''}
 
