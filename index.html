@@ -295,9 +295,31 @@
       }
 
       .popup-meta-chip.access-chip {
+        font-weight: 500;
+      }
+
+      .popup-meta-chip.access-chip.access-1 {
         background: #EEF7EE;
-        border-color: rgba(52, 146, 62, 0.16);
+        border-color: rgba(52,146,62,0.16);
         color: #2F8A3A;
+      }
+
+      .popup-meta-chip.access-chip.access-2 {
+        background: #F3F7FD;
+        border-color: rgba(27,110,192,0.14);
+        color: #3B6FA6;
+      }
+
+      .popup-meta-chip.access-chip.access-3 {
+        background: #FBF6EC;
+        border-color: rgba(168,126,58,0.16);
+        color: #8B6A2B;
+      }
+
+      .popup-meta-chip.access-chip.access-4 {
+        background: #F4F5F7;
+        border-color: rgba(110,122,138,0.16);
+        color: #667281;
       }
 
       .popup-chip-image {
@@ -723,7 +745,7 @@
 					"NAME" : "Hanssens Artisanaal",
 					"TYPE" : "Blenders",
 					"ADDRESS" : "Vroenenbosstraat 15 Dworp, 1653",
-					"LINK" : "N/A"
+					"LINK" : "N/A",
 					"TIPS" : "Talk to the owner, Karel is a great, passionate brewer",
 					"NOTE" : "The brewery and the cafe are two separate businesses, so search the big barn on the right",
 					"ACCESS" : "3",
@@ -805,7 +827,7 @@
 					"NAME" : "Brasserie Cantillon/Brussels Museum of the Gueuze",
 					"TYPE" : "Breweries",
 					"ADDRESS" : "56 rue Gheude B-1070 Brussels",
-					"LINK" : "http://www.cantillon.be"
+					"LINK" : "http://www.cantillon.be",
 					"TIPS" : "Talk to the owner, Karel is a great, passionate brewer",
 					"NOTE" : "The brewery and the cafe are two separate businesses, so search the big barn on the right",
 					"ACCESS" : "1",
@@ -835,7 +857,7 @@
 					"NAME" : "Brouwerij Girardin",
 					"TYPE" : "Breweries",
 					"ADDRESS" : "Lindenbergstraat 10-12 Dilbeek-St Ulriks Kapelle, 1700",
-					"LINK" : "http://www.girardin1882.be"
+					"LINK" : "http://www.girardin1882.be",
 					"TIPS" : "Talk to the owner, Karel is a great, passionate brewer",
 					"NOTE" : "The brewery and the cafe are two separate businesses, so search the big barn on the right",
 					"ACCESS" : "4",
@@ -1878,6 +1900,25 @@ function formatType(type) {
         }[type] || type || 'Place';
       }
 
+      function shouldShowAccessChip(type, accessValue) {
+        if (!accessValue || String(accessValue).trim() === '') return false;
+        return type === 'Breweries' || type === 'Blenders';
+      }
+
+      function getAccessMeta(accessValue) {
+        const value = String(accessValue || '').trim();
+
+        return {
+          '1': { label: 'Open to visitors', className: 'access-1' },
+          '2': { label: 'Open on select days', className: 'access-2' },
+          '3': { label: 'By appointment', className: 'access-3' },
+          '4': { label: 'Private', className: 'access-4' }
+        }[value] || {
+          label: value,
+          className: 'access-2'
+        };
+      }
+
       function escapeHtml(value) {
         return String(value || '')
           .replace(/&/g, '&amp;')
@@ -1906,9 +1947,11 @@ function formatType(type) {
   const hasWebsite = p.LINK && p.LINK !== 'N/A';
   const hasDetails = p.DETAILS && p.DETAILS !== 'N/A';
   const hasTip = p.TIPS && p.TIPS.trim() !== '';
-  const hasAccess = p.ACCESS && p.ACCESS.trim() !== '';
+  const hasAccess = p.ACCESS && String(p.ACCESS).trim() !== '';
   const hasHours = p.HOURS && p.HOURS.trim() !== '';
   const hasNote = p.NOTE && p.NOTE.trim() !== '';
+  const showAccessChip = shouldShowAccessChip(p.TYPE, p.ACCESS);
+  const accessMeta = showAccessChip ? getAccessMeta(p.ACCESS) : null;
 
   const popup = new mapboxgl.Popup({ closeOnClick: true })
     .setLngLat(currentFeature.geometry.coordinates)
@@ -1922,9 +1965,9 @@ function formatType(type) {
             ${escapeHtml(formatType(p.TYPE))}
           </div>
 
-          ${hasAccess ? `
-            <div class="popup-meta-chip access-chip">
-              ${escapeHtml(p.ACCESS)}
+          ${showAccessChip ? `
+            <div class="popup-meta-chip access-chip ${accessMeta.className}">
+              ${escapeHtml(accessMeta.label)}
             </div>
           ` : ''}
         </div>
