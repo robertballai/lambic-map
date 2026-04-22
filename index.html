@@ -81,6 +81,7 @@
           justify-content: center;
           flex: 0 0 16px;
           transition: background 0.2s ease, box-shadow 0.2s ease;
+          position: relative;
         }
 		
 		.legend-checkbox:hover {
@@ -93,11 +94,16 @@
 		
 		.legend-checkbox:checked::after {
 		  content: "";
-		  width: 4px;
-		  height: 8px;
+		  position: absolute;
+		  top: 50%;
+		  left: 50%;
+		  width: 5px;
+		  height: 9px;
 		  border-right: 2px solid #fff;
 		  border-bottom: 2px solid #fff;
-		  transform: rotate(45deg);
+		  box-sizing: border-box;
+		  transform: translate(-50%, -58%) rotate(45deg);
+		  transform-origin: center;
 		}
 
 		.legend-icon {
