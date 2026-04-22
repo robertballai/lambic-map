@@ -311,9 +311,9 @@
       }
 
       .popup-meta-chip.access-chip.access-3 {
-        background: #FBF6EC;
-        border-color: rgba(168,126,58,0.16);
-        color: #8B6A2B;
+        background: #F6EEDF;
+        border-color: rgba(150,105,40,0.18);
+        color: #7A5A22;
       }
 
       .popup-meta-chip.access-chip.access-4 {
@@ -864,7 +864,7 @@
 					"LINK" : "http://www.girardin1882.be",
 					"TIPS" : "Talk to the owner, Karel is a great, passionate brewer",
 					"NOTE" : "The brewery and the cafe are two separate businesses, so search the big barn on the right",
-					"ACCESS" : "4",
+					"ACCESS" : "4"
 				}
 			},
 			{
@@ -1913,25 +1913,25 @@ function formatType(type) {
         const value = String(accessValue || '').trim();
 
         return {
-          '1': { 
-            label: 'Open', 
+          '1': {
+            label: 'Open',
             className: 'access-1',
-            icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 3h12v18H4V3zm10 2H6v14h8V5zm2 6h2v2h-2v-2z" fill="currentColor"/></svg>'
+            icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 3h12v18H4V3zm10 2H6v14h8V5zM16 12h2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
           },
-          '2': { 
-            label: 'Limited days', 
+          '2': {
+            label: 'Limited days',
             className: 'access-2',
-            icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 2h2v2h8V2h2v2h2v18H4V4h2V2zm12 6H6v12h12V8z" fill="currentColor"/></svg>'
+            icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 2h2v2h8V2h2v2h2v18H4V4h2V2zm12 6H6v12h12V8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
           },
-          '3': { 
-            label: 'Appointment', 
+          '3': {
+            label: 'Appointment',
             className: 'access-3',
-            icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 2h2v2h8V2h2v2h2v18H4V4h2V2zm12 6H6v12h12V8zM9 14l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 2h2v2h8V2h2v2h2v18H4V4h2V2zm12 6H6v12h12V8zM9 14l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
           },
-          '4': { 
-            label: 'Private', 
+          '4': {
+            label: 'Private',
             className: 'access-4',
-            icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 10V7a6 6 0 0112 0v3h1v12H5V10h1zm2 0h8V7a4 4 0 00-8 0v3z" fill="currentColor"/></svg>'
+            icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 10V7a6 6 0 0112 0v3h1v12H5V10h1zm2 0h8V7a4 4 0 00-8 0v3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
           }
         }[value] || {
           label: value,
