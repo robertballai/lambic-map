@@ -1909,13 +1909,30 @@ function formatType(type) {
         const value = String(accessValue || '').trim();
 
         return {
-          '1': { label: 'Open to visitors', className: 'access-1' },
-          '2': { label: 'Open on select days', className: 'access-2' },
-          '3': { label: 'By appointment', className: 'access-3' },
-          '4': { label: 'Private', className: 'access-4' }
+          '1': { 
+            label: 'Open', 
+            className: 'access-1',
+            icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 3h12v18H4V3zm10 2H6v14h8V5zm2 6h2v2h-2v-2z" fill="currentColor"/></svg>'
+          },
+          '2': { 
+            label: 'Select days', 
+            className: 'access-2',
+            icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M7 2h2v2h6V2h2v2h3v18H4V4h3V2zm13 6H4v12h16V8z" fill="currentColor"/></svg>'
+          },
+          '3': { 
+            label: 'Appointment', 
+            className: 'access-3',
+            icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M7 2h2v2h6V2h2v2h3v18H4V4h3V2zm13 6H4v12h16V8zm-9 8l-3-3 1.4-1.4L11 13.2l3.6-3.6L16 11l-5 5z" fill="currentColor"/></svg>'
+          },
+          '4': { 
+            label: 'Private', 
+            className: 'access-4',
+            icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 10V7a6 6 0 0112 0v3h1v12H5V10h1zm2 0h8V7a4 4 0 00-8 0v3z" fill="currentColor"/></svg>'
+          }
         }[value] || {
           label: value,
-          className: 'access-2'
+          className: 'access-2',
+          icon: ''
         };
       }
 
@@ -1967,6 +1984,7 @@ function formatType(type) {
 
           ${showAccessChip ? `
             <div class="popup-meta-chip access-chip ${accessMeta.className}">
+              <span class="popup-icon">${accessMeta.icon}</span>
               ${escapeHtml(accessMeta.label)}
             </div>
           ` : ''}
