@@ -305,9 +305,9 @@
       }
 
       .popup-meta-chip.access-chip.access-2 {
-        background: #F3F7FD;
-        border-color: rgba(27,110,192,0.14);
-        color: #3B6FA6;
+        background: #FBF6EC;
+        border-color: rgba(168,126,58,0.16);
+        color: #8B6A2B;
       }
 
       .popup-meta-chip.access-chip.access-3 {
@@ -375,12 +375,16 @@
       }
 
 		.popup-icon {
-		  display: inline-flex;
-		  align-items: center;
-		  justify-content: center;
-		  margin-right: 5px;
-		  color: inherit;
-		}
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+  color: inherit;
+}
+
+.popup-icon svg {
+  display: block;
+}
 
       .popup-button {
         display: inline-flex;
@@ -1915,9 +1919,9 @@ function formatType(type) {
             icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 3h12v18H4V3zm10 2H6v14h8V5zm2 6h2v2h-2v-2z" fill="currentColor"/></svg>'
           },
           '2': { 
-            label: 'Select days', 
+            label: 'Limited days', 
             className: 'access-2',
-            icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M7 2h2v2h6V2h2v2h3v18H4V4h3V2zm13 6H4v12h16V8z" fill="currentColor"/></svg>'
+            icon: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 2h2v2h8V2h2v2h2v18H4V4h2V2zm12 6H6v12h12V8z" fill="currentColor"/></svg>'
           },
           '3': { 
             label: 'Appointment', 
